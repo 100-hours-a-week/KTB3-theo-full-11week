@@ -70,7 +70,7 @@ export function editPost(post) {
             }
         }
         const toastComponent = toast(toastLogic);
-        root.appendChild(toastComponent);
+        document.body.appendChild(toastComponent);
     })
 
 

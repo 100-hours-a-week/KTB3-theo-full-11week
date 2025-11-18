@@ -14,7 +14,7 @@ export function makePost() {
     root.innerHTML =
         `
         <div class="make-post-wrapper">
-            <h2>게시글 작성</h2>
+            <h2>소중한 경험을 공유해요</h2>
             <form id="make-post-form">
                 <div class="make-post-field">
                     <label class="make-post-label">제목*</label>
@@ -143,14 +143,14 @@ export function makePost() {
             const responseBody = response.data;
 
             const toastLogic = {
-                title: "게시글을 생성했습니다.",
+                title: "소중한 경험이 공유되었어요.",
                 buttonTitle: "게시글 목록 화면으로 이동",
                 buttonLogic: function () {
                     navigate('/post');
                 }
             }
             const toastComponent = toast(toastLogic);
-            root.appendChild(toastComponent);
+            document.body.appendChild(toastComponent);
 
         } catch (error) {
             if (error instanceof ApiError) {

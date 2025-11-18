@@ -16,7 +16,7 @@ export function commonHeader() {
                 <div class="common-header-left">
                     <button id="common-back-btn">&lt;</button>
                 </div>
-                <div class="common-header-center">아무 말 대잔치</div>
+                <div class="common-header-center">바다의 가격을 가장 빠르게, 오늘의 수산</div>
                 <div class="common-header-right">
                     <div class="profile-trigger">
                         <button id="common-header-profile-btn">
@@ -130,7 +130,7 @@ export function commonHeader() {
                     }
                 }
                 const modalComponent = modal(modalLogic);
-                root.appendChild(modalComponent);
+                document.body.appendChild(modalComponent);
                 break;
         }
         closeMenu();

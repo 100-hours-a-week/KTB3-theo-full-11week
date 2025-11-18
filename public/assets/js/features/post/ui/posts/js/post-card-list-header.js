@@ -10,8 +10,8 @@ export function postCardListHeader() {
     root.innerHTML =
         `
         <div class="post-card-title-box">
-            <p>안녕하세요,<br> 아무 말 대잔치 <strong>게시판</strong>입니다.</p>
-            <button id="post-card-create-btn">게시글 작성</button>
+            <p>오늘의 물고기에서,<br>오늘의 <strong>시세</strong>와<strong>이야기</strong>를 나눠보세요</p>
+            <button id="post-card-create-btn">경험 나누기</button>
         </div>
         `
 

@@ -1,169 +1,290 @@
+/* ===== 전체 컨테이너 ===== */
 .edit-profile-container {
     display: flex;
     justify-content: center;
-    align-items: center;
-}
+    align-items: flex-start;
 
-.edit-profile-wrapper {
-    width: 35%;
+    min-height: calc(100vh - 140px);
+    padding: 72px 16px 40px;
     box-sizing: border-box;
-    padding: 3%;
 }
 
+/* ===== 카드 래퍼 ===== */
+.edit-profile-wrapper {
+    width: 100%;
+    max-width: 480px;
+
+    box-sizing: border-box;
+    padding: 28px 26px 24px;
+
+    background-color: #ffffff;
+    border-radius: 24px;
+
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 18px 40px rgba(148, 163, 184, 0.25);
+}
+
+/* 제목 */
 .edit-profile-wrapper > h2 {
+    margin: 0 0 18px;
+    text-align: center;
+
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: #1e3a5f;
+}
+
+/* ===== 폼 ===== */
+#edit-profile-form {
+    max-width: 100%;
+    width: 100%;
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+#edit-profile-form .edit-profile-field:first-of-type {
+    align-items: center;
     text-align: center;
 }
 
+/* 프로필 사진 라벨도 가운데로 */
+#edit-profile-form .edit-profile-field:first-of-type .edit-profile-label {
+    align-self: flex-start;
+    text-align: left;
+    width: 100%;
+    margin-bottom: 10px;  /* 라벨과 버튼 사이 간격 조금 */
+}
+
+/* 필드 공통 */
 .edit-profile-field {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
 
     max-width: 100%;
+    margin-bottom: 18px;
 }
 
-.edit-profile-field .edit-profile-label,
-.edit-profile-field .edit-profile-form-helper-text {
-    align-self: flex-start;
-    margin-left : 0;
-    margin-right: 0;
-}
-
-.edit-profile-field p {
-    text-align: left;;
-    width: 100%;
-    margin: 0;
-    padding-left: 2%;
-}
-.edit-profile-input {
-    display: block;
-    width: 98%;
-    border: 1px solid black;
-    padding:2% 0;
-    padding-left: 1%;
-    margin: 0 auto;
-    font-size: 1rem;
-    border-radius: 10px;
-    resize: none;
-}
-
+/* 라벨 공통 */
 .edit-profile-label {
     display: block;
-    margin: 0 auto;
-    margin-bottom: 2%;
-    text-align: left;
-    font-weight: bolder;
+    margin-bottom: 6px;
+
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1f2937;
 }
 
+/* 이메일 표시 텍스트 */
+.edit-profile-field > p:not(.edit-profile-form-helper-text) {
+    text-align: left;
+    width: 100%;
+    margin-bottom: 16px;
+    padding-left: 2px;
+
+    font-size: 0.92rem;
+    color: #4b5563;
+}
+
+/* 입력창 공통 */
+.edit-profile-input {
+    display: block;
+    width: 100%;
+
+    border: 1px solid #d1d5db;
+    padding: 10px 12px;
+    margin: 0;
+
+    font-size: 0.95rem;
+    border-radius: 10px;
+    resize: none;
+    box-sizing: border-box;
+
+    background-color: #f9fafb;
+    outline: none;
+    transition: background-color 0.15s ease, border-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.edit-profile-input:focus {
+    background-color: #ffffff;
+    border-color: #93c5fd;
+    box-shadow: 0 0 0 1px #93c5fd33;
+}
+
+/* 헬퍼 텍스트 */
 .edit-profile-form-helper-text {
     display: block;
     text-align: left;
     width: 100%;
     max-width: 100%;
+
     white-space: inherit;
     overflow-wrap: anywhere;
     box-sizing: border-box;
-    color: #FF3333;
+
+    color: #ef4444;
     font-size: 0.8rem;
-    margin-top: 10%;
+    margin-top: 4px;
+    margin-bottom: 6px;
 }
 
-#edit-profile-form {
-    max-width: 100%;
-    max-height: 30%;
-    width: 100%;
-    height: 100%;
-    margin-bottom: 4%;
-    text-align: center;
-}
+/* ===== 프로필 이미지 ===== */
 
-#edit-profile-form .edit-profile-field {
-    text-align: left;
-    margin-bottom: 5%;
-}
-
-#edit-profile-form .edit-profile-field:nth-child(3) {
-    margin-bottom: 5%;
-}
-
-#edit-profile-image-preview {
-    width: 100%;
-    height: 100%;
-    object-fit:fill;
-    display: block;
-}
 #edit-profile-form-profile-image {
     display: none;
 }
 
+/* 동그란 프로필 버튼 */
 #edit-profile-image-upload-btn {
-    width: 150px;
-    height: 150px;
-    border: none;
+    width: 140px;
+    height: 140px;
+
     border-radius: 50%;
+    border: 2px dashed #bfdbfe;
     outline: none;
-    cursor: pointer;
+    margin-bottom: 8px;
 
     display: inline-flex;
     align-items: center;
     justify-content: center;
 
-    background-color: #C4C4C4;
-    font-size: 2rem;
+    background-color: #eff6ff;
+    font-size: 0;
+    cursor: pointer;
 
     padding: 0;
     overflow: hidden;
     position: relative;
+
+    transition: background-color 0.15s ease, border-color 0.15s ease,
+        box-shadow 0.15s ease, transform 0.1s ease;
 }
 
-#edit-profile-image-upload-btn.upload{
-   background-color: transparent;
+#edit-profile-image-upload-btn:hover {
+    background-color: #e0edff;
+    border-color: #93c5fd;
+    box-shadow: 0 0 0 1px #bfdbfe66;
 }
 
+#edit-profile-image-upload-btn:active {
+    transform: translateY(1px);
+    box-shadow: none;
+}
+
+/* 이미지 */
+#edit-profile-image-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* ===== 수정하기 버튼 ===== */
 #edit-profile-update-btn {
     display: block;
-    text-align: center;
     width: 100%;
-    padding: 2% 0;
-    margin: 0 auto;
-    height: 50%;
+    padding: 10px 0;
+    margin: 4px 0 8px;
+
     border: none;
-    border-radius: 10px;
-    color: white;
-    background-color: #ACA0EB;
-    font-size: 1.2rem;
+    border-radius: 999px;
+
+    font-size: 0.98rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+
+    color: #ffffff;
+    background-color: #dbeafe; /* 비활성화 색 */
+
+    cursor: default;
+    transition: background 0.2s ease, transform 0.1s ease,
+        box-shadow 0.2s ease;
 }
 
 #edit-profile-update-btn.active {
-    background-color: #7F6AEE;
+    background: linear-gradient(135deg, #4f9dff, #1a73e8);
+    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.35);
     cursor: pointer;
 }
 
-#edit-profile-form {
-    border: 1px sollid black;
+#edit-profile-update-btn.active:active {
+    transform: translateY(1px);
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
 }
 
+/* ===== 회원 탈퇴 링크 / 수정완료 버튼 ===== */
 #edit-profile-to-unsubscribe-link {
     display: block;
-    color: black;
-    text-decoration-line: none;
+    width: 100%;
+    max-width: 260px;
+
+    margin: 14px auto 10px;
+    padding: 9px 0;
+
+    border-radius: 999px;
+    border: 1px solid #fecaca;
+
     text-align: center;
-    margin-bottom: 20%;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+
+    color: #b91c1c;         /* 진한 빨강 텍스트 */
+    background-color: #fef2f2;  /* 아주 옅은 빨강 배경 */
     cursor: pointer;
+
+    transition: background-color 0.15s ease,
+        border-color 0.15s ease,
+        box-shadow 0.15s ease,
+        transform 0.08s ease;
 }
 
+#edit-profile-to-unsubscribe-link:hover {
+   background-color: #fee2e2;
+    border-color: #fca5a5;
+    box-shadow: 0 8px 18px rgba(248, 113, 113, 0.35);
+}
+
+#edit-profile-to-unsubscribe-link:active {
+    transform: translateY(1px);
+    box-shadow: 0 4px 10px rgba(185, 28, 28, 0.3);
+}
+
+/* 수정완료(목록으로) 버튼 – 서브 액션 */
 #edit-profile-to-posts {
     display: block;
     text-align: center;
-    width: 30%;
-    padding: 2% 2%;
-    margin: 0 auto;
-    height: 100%;
-    border-radius: 20px;
-    color: white;
-    border: none;
-    background-color: #ACA0EB;
-    font-weight: lighter;
-    font-size: 1.2rem;
+
+    width: 60%;
+    max-width: 260px;
+    padding: 9px 0;
+    margin: 4px auto 0;
+
+    border-radius: 999px;
+    border: 1px solid #bfdbfe;
+
+    margin-top: 6px;
+
+    font-size: 0.9rem;
+    font-weight: 500;
+
+    color: #1d4ed8;
+    background-color: #ffffff;
     cursor: pointer;
+
+    transition: background-color 0.15s ease, border-color 0.15s ease,
+        box-shadow 0.15s ease, transform 0.1s ease;
+}
+
+#edit-profile-to-posts:hover {
+    background-color: #eff6ff;
+    border-color: #93c5fd;
+    box-shadow: 0 0 0 1px #bfdbfe66;
+}
+
+#edit-profile-to-posts:active {
+    transform: translateY(1px);
+    box-shadow: none;
 }

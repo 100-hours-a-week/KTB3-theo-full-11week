@@ -1,7 +1,6 @@
 import { activeFeatureCss } from "../../../../../shared/lib/dom.js";
 import { emit, eventBus } from "../../../../../shared/lib/eventBus.js";
 import { cssPath } from "../../../../../shared/path/cssPath.js";
-import { Api } from "../../../../../shared/lib/api/api.js";
 import { apiPath } from "../../../../../shared/path/apiPath.js";
 import { commentCardList } from "./comment-card-list.js";
 import { ApiError } from "../../../../../shared/lib/api/api-error.js";
@@ -177,7 +176,7 @@ export async function post(postId) {
         }
 
         const modalComponent = modal(modalLogic);
-        root.appendChild(modalComponent);
+        document.body.appendChild(modalComponent);
     }
     return root;
 }

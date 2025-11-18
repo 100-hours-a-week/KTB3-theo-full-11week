@@ -107,30 +107,33 @@ export class Api {
         const options = this.buildOptions();
 
         const response = await fetch(url, options);
+        const contentType = response.headers.get('Content-Type') || "";
+        const canHaveJsonBody = ![204, 205].includes(response.status) && contentType.includes('application/json');
+        let data = null;
 
-        const hasBody = this.#method !== 'DELETE';
-
-        let jsonData = null;
-        if (hasBody) {
-            jsonData = await response.json();
+        if (canHaveJsonBody) {
+            try {
+                data = await response.json();
+            } catch (error) {
+                data = null;
+            }
         }
 
         // 4XX, 5XX 응답
         if (!response.ok) {
             // api 에러 처리
-            throw new ApiError(
-                result.code,
-                result.status,
-                result.message,
-                result.path
-            );
+            const code = data.code;
+            const status = response.status;
+            const message = data.message;
+            const path = data.path;
+            throw new ApiError(code, status, message, path);
         }
 
-        if (!hasBody) {
-            return response;
+        if (canHaveJsonBody) {
+            return data;
         }
-
         // 2XX 응답
-        return jsonData;
+        return response;
+
     }
 }

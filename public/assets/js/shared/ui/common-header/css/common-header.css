@@ -1,130 +1,191 @@
+/* ===== 공통 헤더 컨테이너 ===== */
 .common-header-container {
     position: sticky;
     top: 0;
     z-index: 50;
-    height: 100px;
+    height: 72px;
+
+    background-color: #ffffff;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
 }
+
+/* 내부 레이아웃 */
 .common-header-wrapper {
     height: 100%;
     margin: 0 auto;
+    max-width: 960px;
 
     display: grid;
     grid-template-columns: 1fr max-content 1fr;
     align-items: center;
 
-    border-bottom: 1px solid black;
+    padding: 0 16px;
+    box-sizing: border-box;
 }
 
+/* 왼쪽: 뒤로가기 버튼 영역 */
 .common-header-left {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-
-    padding-right: 15%;
+    justify-content: flex-start;
 }
 
+/* 중앙: 타이틀 */
 .common-header-center {
     display: flex;
     align-items: center;
     justify-content: center;
 
-    font-family: Sandoll GogoRound;
-    font-weight: 400;
-    font-style: 03 Rg;
-    font-size: 32px;
-    line-height: 100%;
-    letter-spacing: 0%;
+    font-weight: 700;
+    font-size: 1.2rem;
+    letter-spacing: 0.16em;
     text-align: center;
+
+    color: #1e3a5f;
 }
 
+/* 오른쪽: 프로필 영역 */
 .common-header-right {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-
-    padding-left: 15%;
+    justify-content: flex-end;
 }
 
+/* ===== 뒤로가기 버튼 ===== */
+#common-back-btn {
+    width: 36px;
+    height: 36px;
+
+    border-radius: 999px;
+    border: 1px solid #d1d5db;
+    background-color: #ffffff;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+    padding: 0;
+
+    font-size: 1.3rem;
+    line-height: 1;
+    color: #4b5563;
+
+    transition: background-color 0.15s ease, border-color 0.15s ease,
+        transform 0.1s ease, box-shadow 0.15s ease;
+}
+
+#common-back-btn:hover {
+    background-color: #eff6ff;
+    border-color: #93c5fd;
+    box-shadow: 0 0 0 1px #bfdbfe66;
+}
+
+#common-back-btn:active {
+    transform: translateY(1px);
+    box-shadow: none;
+}
+
+/* ===== 프로필 트리거 ===== */
 .profile-trigger {
     position: relative;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+/* 프로필 버튼 자체 */
+#common-header-profile-btn {
+    width: 40px;
+    height: 40px;
+    aspect-ratio: 1 / 1;
+
+    border-radius: 999px;
+    overflow: hidden;
+    flex-shrink: 0;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #d1d5db;
+    background-color: #f9fafb;
+
+    cursor: pointer;
+    padding: 0;
+
+    transition: background-color 0.15s ease, border-color 0.15s ease,
+        box-shadow 0.15s ease, transform 0.1s ease;
+}
+
+#common-header-profile-btn:hover {
+    background-color: #eff6ff;
+    border-color: #93c5fd;
+    box-shadow: 0 0 0 1px #bfdbfe66;
+}
+
+#common-header-profile-btn:active {
+    transform: translateY(1px);
+    box-shadow: none;
+}
+
+/* 프로필 이미지 */
+#common-header-userprofile {
     width: 100%;
     height: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border: none;
 }
 
-.common-header-profile-menu[hidden] {
-    display: none;
-}
+/* ===== 드롭다운 메뉴 ===== */
 
+.common-header-profile-menu[hidden],
 .common-header-profile-menu.hide {
     display: none;
 }
 
 .common-header-profile-menu {
     position: absolute;
-    top: calc(100% + 8px);
-    min-width: 20%;
-    background: #D9D9D9;
-    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+    top: calc(100% + 10px);
+    right: 0;
+
+    min-width: 160px;
+    padding: 4px;
+    box-sizing: border-box;
+
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.2);
 
     display: flex;
     flex-direction: column;
     z-index: 1000;
 }
 
+/* 메뉴 버튼 공통 */
 .header-profile-menu-btn {
-    text-align: center;
-    padding: 5% 4%;
+    width: 100%;
+    text-align: left;
+
+    padding: 8px 10px;
+    margin: 0;
+
     background-color: transparent;
     border: none;
+    border-radius: 8px;
+
     font-size: 0.9rem;
+    color: #374151;
     cursor: pointer;
+
+    transition: background-color 0.12s ease, color 0.12s ease;
 }
 
+/* 호버/포커스 시 파스텔 블루 하이라이트 */
 .header-profile-menu-btn:hover,
 .header-profile-menu-btn:focus {
-    background-color: #E9E9E9;
-}
-#common-back-btn {
-    width: 50px;
-    height: 50px;
-
-    border: none;
-    background: none;
-    cursor: pointer;
-
-
-    font-family: Sandoll GogoRound;
-    font-weight: 400;
-    font-style: 03 Rg;
-    font-size: 36px;
-    line-height: 100%;
-    letter-spacing: 0%;
-    text-align: center;
-}
-
-
-
-#common-header-userprofile {
-    width: 100%;
-    height: 100%;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    
-    border: none;
-}
-
-#common-header-profile-btn {
-    width: 8%;
-    height: 8%;
-    aspect-ratio: 1 / 1;
-    border-radius: 50%;
-    overflow: hidden;
-    flex-shrink: 0;
-
-    display: block;
-    border: none;
-
-    cursor: pointer;
-    padding: 0;
+    background-color: #eff6ff;
+    color: #1d4ed8;
 }

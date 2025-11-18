@@ -72,7 +72,7 @@ export function comment(commentData, postId) {
         }
 
         const modalComponent = modal(modalLogic);
-        root.appendChild(modalComponent)
+        document.body.appendChild(modalComponent)
     }
 
     return root;

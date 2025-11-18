@@ -197,7 +197,7 @@ export async function editProfile() {
                 buttonLogic: function () { }
             }
             const toastComponent = toast(toastLogic);
-            root.appendChild(toastComponent);
+            document.body.appendChild(toastComponent);
 
         } catch (error) {
             if (error instanceof ApiError) {
@@ -226,7 +226,7 @@ export async function editProfile() {
             confirmLogic: handleConfirmChoice,
         }
         const modalComponent = modal(modalLogic);
-        root.appendChild(modalComponent);
+        document.body.appendChild(modalComponent);
     }
 
 

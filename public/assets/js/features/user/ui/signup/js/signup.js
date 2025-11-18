@@ -113,6 +113,7 @@ export function signup() {
         isAvailableEmail = await handleEmailDuplication();
         activeSignUpButton();
     })
+
     //패스워드 이벤트 등록
     passwordInput.addEventListener('input', () => {
         handleInvalidPassword();
@@ -158,7 +159,7 @@ export function signup() {
         const nickname = String(nicknameInput.value).trim();
         const profileImage = profileImageInput.files[0];
 
-        const isFilled = email && password && passwordConfirm && nickname && profileImage;
+        const isFilled = email && password && passwordConfirm && nickname;
 
         // 입력 폼이 모두 채워진 경우
         if (!isFilled) {
@@ -344,7 +345,7 @@ export function signup() {
                 }
             }
             const toastComponent = toast(toastLogic);
-            root.appendChild(toastComponent);
+            document.body.appendChild(toastComponent);
 
         } catch (error) {
             if (error instanceof ApiError) {

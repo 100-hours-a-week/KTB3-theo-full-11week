@@ -1,0 +1,50 @@
+/* ===== Intro Splash (파스텔 바다 버전) ===== */
+.intro-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* 인트로 시에만 잠깐 보이는 파스텔 블루 배경 */
+    background: radial-gradient(
+        circle at 50% 0%,
+        rgba(180, 210, 255, 0.95),
+        rgba(120, 160, 220, 0.95)
+    );
+    z-index: 9999;
+    backdrop-filter: blur(3px);
+}
+
+.intro-text {
+    font-size: 2.4rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    opacity: 0;
+    transform: translateY(18px);
+    text-align: center;
+
+    color: #ffffff; /* 👉 글자 흰색으로 */
+    text-shadow: 0 0 14px rgba(15, 23, 42, 0.9);
+
+    animation: introSoft 1.6s ease-out forwards;
+}
+
+@keyframes introSoft {
+    0% {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+    35% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    70% {
+        opacity: 1;
+        transform: translateY(-2px);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+}

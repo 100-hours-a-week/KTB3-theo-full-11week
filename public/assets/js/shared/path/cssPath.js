@@ -4,6 +4,7 @@ export const cssPath = {
     COMMON_HEADER_CSS_PATH: '/common-header/css/common-header.css',
     COMMON_MODAL_CSS_PATH: '/modal/css/modal.css',
     COMMON_TOAST_CSS_PATH: '/toast/css/toast.css',
+    INTRO_CSS_PATH: '/intro/css/intro.css',
 
     // Auth
     LOGIN_CSS_PATH: '/auth/ui/login/css/login.css',

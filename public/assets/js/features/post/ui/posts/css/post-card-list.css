@@ -1,18 +1,32 @@
-.post-card-list-container{
-    width: 60%;
-    margin: 4% auto;
+.post-card-list-container {
+    width: 100%;
+    max-width: 960px;
+    margin: 32px auto 40px;
+    padding: 0 16px;
+    box-sizing: border-box;
 }
 
+/* 섹션 전환용 */
 .post-card-list-section {
     width: 100%;
     display: none;
 }
+
 .post-card-list-section.active {
     display: block;
 }
+
 .post-detail-section {
     width: 100%;
+    display: none;
 }
+
 .post-detail-section.active {
     display: block;
+}
+
+/* 무한 스크롤 sentinel은 화면에 안 보이게 */
+.post-card-list-sentinel {
+    height: 1px;
+    width: 100%;
 }

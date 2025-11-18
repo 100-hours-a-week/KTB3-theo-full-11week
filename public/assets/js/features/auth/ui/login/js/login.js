@@ -129,11 +129,12 @@ export function login() {
             const password = String(passwordInput.value).trim();
 
             const response = await requestLogin(email, password);
+            console.log(response);
             const responseBody = response.data;
             const isLoginSuccess = responseBody.loginSuccess;
             const nickname = responseBody.nickname;
             const profileImage = responseBody.profileImage;
-
+            console.log(isLoginSuccess);
             if (isLoginSuccess) {
                 // TODO: 로그인 성공 시 게시글 목록화면으로 라우팅 처리 필요
                 localStorage.setItem('currentUserId', responseBody.id);

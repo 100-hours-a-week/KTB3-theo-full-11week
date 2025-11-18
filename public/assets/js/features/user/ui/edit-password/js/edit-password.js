@@ -153,7 +153,7 @@ export function editPassword() {
                 }
             }
             const toastComponent = toast(toastLogic);
-            root.appendChild(toastComponent);
+            document.body.appendChild(toastComponent);
 
         } catch (error) {
             if (error instanceof ApiError) {

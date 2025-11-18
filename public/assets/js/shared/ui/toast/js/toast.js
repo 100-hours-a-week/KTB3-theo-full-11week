@@ -22,6 +22,5 @@ export function toast(toastLogic) {
         toastLogic.buttonLogic();
         root.remove();
     })
-
     return root;
 }
