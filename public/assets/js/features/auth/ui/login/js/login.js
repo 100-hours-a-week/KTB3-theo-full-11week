@@ -48,6 +48,44 @@ export function login() {
         handleLoginRequest();
     })
 
+    // 로그인 요청
+    async function handleLoginRequest() {
+        if (loginButton.disabled) return;
+
+        try {
+            const email = String(emailInput.value).trim();
+            const password = String(passwordInput.value).trim();
+
+            const response = await requestLogin(email, password);
+            const responseBody = response.data;
+            const isLoginSuccess = responseBody.loginSuccess;
+            const nickname = responseBody.nickname;
+            const profileImage = responseBody.profileImage;
+            const likedPostIds = responseBody.likedPostIds;
+            console.log(likedPostIds);
+
+            console.log(responseBody);
+            if (isLoginSuccess) {
+                // TODO: 로그인 성공 시 게시글 목록화면으로 라우팅 처리 필요
+                localStorage.setItem('currentUserId', responseBody.id);
+                localStorage.setItem('profileImage', profileImage);
+                localStorage.setItem('nickname', nickname);
+                localStorage.setItem('likedPostId', likedPostIds);
+                console.log(localStorage.getItem('likedPostId'));
+
+                emit('user:login', { profileImage });
+
+                navigate('/post');
+            } else {
+                helperText.textContent = '로그인 정보가 맞지 않습니다.';
+            }
+        } catch (error) {
+            if (error instanceof ApiError) {
+                handleLoginFail(error);
+            }
+        }
+    }
+
     // 2. 이메일 이벤트 등록
     emailInput.addEventListener('input', () => {
         handleInvalidEmail();
@@ -120,39 +158,7 @@ export function login() {
         helperText.textContent = '';
     }
 
-    // 5. 로그인 요청
-    async function handleLoginRequest() {
-        if (loginButton.disabled) return;
 
-        try {
-            const email = String(emailInput.value).trim();
-            const password = String(passwordInput.value).trim();
-
-            const response = await requestLogin(email, password);
-            console.log(response);
-            const responseBody = response.data;
-            const isLoginSuccess = responseBody.loginSuccess;
-            const nickname = responseBody.nickname;
-            const profileImage = responseBody.profileImage;
-            console.log(isLoginSuccess);
-            if (isLoginSuccess) {
-                // TODO: 로그인 성공 시 게시글 목록화면으로 라우팅 처리 필요
-                localStorage.setItem('currentUserId', responseBody.id);
-                localStorage.setItem('profileImage', profileImage);
-                localStorage.setItem('nickname', nickname);
-
-                emit('user:login', { profileImage });
-
-                navigate('/post');
-            } else {
-                helperText.textContent = '로그인 정보가 맞지 않습니다.';
-            }
-        } catch (error) {
-            if (error instanceof ApiError) {
-                handleLoginFail(error);
-            }
-        }
-    }
 
     return root;
 }

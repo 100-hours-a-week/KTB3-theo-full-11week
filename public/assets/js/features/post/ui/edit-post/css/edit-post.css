@@ -1,81 +1,137 @@
+/* ===== 게시글 수정 전체 컨테이너 ===== */
 .edit-post-container {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
 
-    width: 100%;
-    margin: 2% auto 0;
-}
-
-.edit-post-wrapper {
-    width: 90%;
-    padding: 3%;
-
-    margin: 0 auto;
-}
-
-.edit-post-wrapper > h2 {
-    text-align: center;
-}
-
-.edit-post-field {
-    max-width: 100%;
-    margin-bottom: 5%;
-}
-
-.edit-post-input {
-    display: block;
-    width: 98%;
-    border: 1px solid black;
-    padding:2% 1%;
-    padding-left: 1%;
-    margin: 0 auto;
-    font-size: 1rem;
-    border-radius: 10px;
-    resize: none;
+    min-height: calc(100vh - 140px); /* header/footer 여유 */
+    padding: 72px 16px 40px;
     box-sizing: border-box;
 }
 
-.edit-post-label {
-    display: block;
-    margin: 0 auto;
-    margin-bottom: 2%;
-    text-align: left;
-    font-weight: bolder;
+/* ===== 카드 래퍼 (signup/login 카드와 톤 통일) ===== */
+.edit-post-wrapper {
+    width: 100%;
+    max-width: 700px;
+
+    box-sizing: border-box;
+    padding: 32px 28px 28px;
+
+    border-radius: 24px;
+    background-color: #ffffff;
+
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+    border: 1px solid #e5e7eb;
+
+    position: relative;
+    overflow: hidden;
 }
 
+/* 카드 상단에 은은한 바다 그라데이션 (signup/login과 같은 느낌) */
+.edit-post-wrapper::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    top: -40%;
+    height: 160px;
+
+    background: radial-gradient(
+        circle at 0% 0%,
+        rgba(147, 197, 253, 0.8),
+        rgba(191, 219, 254, 0.2),
+        transparent 70%
+    );
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* ===== 제목 영역 ===== */
+.edit-post-wrapper > h2 {
+    margin: 0 0 4px;
+    text-align: center;
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: #1e3a5f;
+}
+
+/* 아래에 오늘의 물고기 캡션 (옵션: 로그인/회원가입과 맞춤) */
+.edit-post-wrapper > h2::after {
+    content: "오늘의 물고기";
+    display: block;
+    margin-top: 6px;
+
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: #7b93b5;
+}
+
+/* ===== 폼 ===== */
+#edit-post-form {
+    max-width: 100%;
+    width: 100%;
+    margin-top: 24px;
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+/* 개별 필드 공통 */
+.edit-post-field {
+    max-width: 100%;
+    margin-bottom: 16px;
+}
+
+/* 라벨 */
+.edit-post-label {
+    display: block;
+    margin-bottom: 6px;
+
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+/* ===== 입력창 공통 (login/signup 인풋 스타일과 통일) ===== */
+.edit-post-input {
+    display: block;
+    width: 100%;
+
+    border: 1px solid #d1d5db;
+    padding: 10px 12px;
+    margin: 0;
+
+    font-size: 0.95rem;
+    border-radius: 10px;
+    resize: none;
+    outline: none;
+    box-sizing: border-box;
+
+    background-color: #f9fafb;
+    transition: background-color 0.15s ease, border-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+/* textarea 높이 */
+#edit-post-form-article {
+    height: 260px;
+}
+
+/* 포커스 시 파스텔 블루 강조 */
+.edit-post-input:focus {
+    background-color: #ffffff;
+    border-color: #93c5fd;
+    box-shadow: 0 0 0 1px #93c5fd33;
+}
+
+/* ===== 파일 업로드 영역 ===== */
 .edit-post-form-file-row {
     display: flex;
     align-items: center;
-    gap: 2%;
+    gap: 10px;
 }
 
-.edit-post-file-btn {
-    display: inline-block;
-    border: 1px solid black;
-    padding: 1%;
-    background-color: #D9D9D9;
-}
-
-.edit-post-file-text {
-    font-size: 0.9rem;
-}
-
-#edit-post-form {
-    max-width: 100%;
-    max-height: 30%;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-}
-
-#edit-post-form .make-post-field {
-    text-align: left;
-}
-
-#edit-post-form-article {
-    height: 300px;
-}
+/* 실제 input은 숨김 */
 #edit-post-form-article-image {
     position: absolute;
     opacity: 0;
@@ -84,24 +140,41 @@
     pointer-events: none;
 }
 
-#edit-post-btn {
-    display: block;
-    text-align: center;
-    width: 70%;
-    padding: 2% 0;
-    margin: 0 auto;
-    height: 50%;
-    border-radius: 10px;
-    color: white;
-    background-color: #ACA0EB;
-    font-size: medium;
-}
+/* 파일 선택 버튼 (토글형 버튼 스타일) */
+.edit-post-file-btn {
+    display: inline-block;
+    padding: 9px 13px;
 
-#edit-post-btn.active {
-    background-color: #7F6AEE;
+    background-color: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 999px;
+
+    font-size: 0.9rem;
+    color: #1d4ed8;
     cursor: pointer;
+
+    transition: background-color 0.15s ease, border-color 0.15s ease,
+        box-shadow 0.15s ease, transform 0.1s ease;
 }
 
+.edit-post-file-btn:hover {
+    background-color: #e0edff;
+    border-color: #93c5fd;
+    box-shadow: 0 0 0 1px #bfdbfe66;
+}
+
+.edit-post-file-btn:active {
+    transform: translateY(1px);
+    box-shadow: none;
+}
+
+/* 파일명 텍스트 */
+.edit-post-file-text {
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+/* ===== 헬퍼 텍스트 (에러 메시지 등) ===== */
 #edit-post-form-helper-text {
     display: block;
     text-align: left;
@@ -110,6 +183,44 @@
     white-space: inherit;
     overflow-wrap: anywhere;
     box-sizing: border-box;
-    color: #FF3333;
+
+    margin-top: 4px;
+
+    color: #ef4444;
     font-size: 0.8rem;
+}
+
+/* ===== 완료 버튼 ===== */
+#edit-post-btn {
+    display: block;
+    width: 100%;
+    padding: 10px 0;
+    margin-top: 8px;
+
+    height: 44px;
+    border-radius: 999px;
+    border: none;
+
+    font-size: 0.98rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+
+    color: #ffffff;
+    background-color: #dbeafe; /* 비활성화 시 연한 파랑 */
+    cursor: default;
+
+    transition: background 0.2s ease, transform 0.1s ease,
+        box-shadow 0.2s ease;
+}
+
+/* active 클래스가 붙을 때: login/signup과 동일한 메인 그라데이션 */
+#edit-post-btn.active {
+    background: linear-gradient(135deg, #4f9dff, #1a73e8);
+    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.35);
+    cursor: pointer;
+}
+
+#edit-post-btn.active:active {
+    transform: translateY(1px);
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
 }

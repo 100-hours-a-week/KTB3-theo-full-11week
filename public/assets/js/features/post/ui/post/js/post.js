@@ -6,20 +6,24 @@ import { commentCardList } from "./comment-card-list.js";
 import { ApiError } from "../../../../../shared/lib/api/api-error.js";
 import { modal } from "../../../../../shared/ui/modal/js/modal.js";
 import { editPost } from "../../edit-post/js/edit-post.js";
-import { requestPostDelete, requestPostDetail, requestPostLike, requestPostLikeCancel } from "../../../../../shared/lib/api/post-api.js";
+import { requestPostDelete, requestPostDetail, requestPostLike, requestPostLikeCancel, requestIncreasePostViewCount } from "../../../../../shared/lib/api/post-api.js";
 
 activeFeatureCss(cssPath.POST_CSS_PATH);
 
+const VIEW_COOLTIME_MS = 10_00 * 60; // 1분
+const VIEW_COOLTIME_KEY = "postViewCoolTime" // 이 키는 숨겨야 함.
 export async function post(postId) {
     const responseBody = await requestPostDetail(postId); // 게시글 상세 조회
     const postDetail = responseBody.data;
     const currentUserNickname = localStorage.getItem('nickname');
+    const likedPostIds = localStorage.getItem('likedPostId')?.split(',') ?? [];
+    let isLikedPost = likedPostIds.includes(String(postId));
+    const wasLikedInitially = isLikedPost;
     const { id, title, authorNickname,
         article, articleImage, authorImage,
         commentCount, createdAt, hit, like, category } = postDetail;
 
 
-    let isLiking = false; // 좋아요 누른 상태인지
     const root = document.createElement('div');
     root.id = `post-container-${id}`;
     root.innerHTML =
@@ -52,7 +56,7 @@ export async function post(postId) {
                 </div>
                 <p id="post-article-text">${article}</p>
                 <div class="post-article-status">
-                    <div class="post-article-like-box">
+                    <div class="post-article-like-box ${isLikedPost ? "like" : ""}">
                         <label id="post-article-like">${like}</label>
                         <label>좋아요 수</label>
                     </div>
@@ -78,18 +82,95 @@ export async function post(postId) {
     const postUpdateButton = root.querySelector('#post-update-btn');
     const postDeleteButton = root.querySelector('#post-delete-btn');
 
+    increaseViewCountOnMountWithStorage(postId, postViewCountLabel);
+
+    function getViewCoolTimeMapFromStroage() {
+        try {
+            const raw = localStorage.getItem(VIEW_COOLTIME_KEY);
+            if (!raw) { return {} }
+            const parsed = JSON.parse(raw);
+
+            return typeof parsed === 'object' && parsed !== null ? parsed : {};
+        } catch (error) {
+            console.log(error);
+            return {};
+        }
+    }
+
+    function saveViewCoolTimeMapToStorage(map) {
+        try {
+            localStorage.setItem(VIEW_COOLTIME_KEY, JSON.stringify(map));
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    async function increaseViewCountOnMountWithStorage(postId, postViewCountLabel) {
+        const postIdStr = String(postId);
+        const now = Date.now();
+
+        const coolTimeMap = getViewCoolTimeMapFromStroage();
+        const lastViewedAt = coolTimeMap[postIdStr];
+
+        if (typeof lastViewedAt === 'number') {
+            const diff = now - lastViewedAt;
+            if (diff < VIEW_COOLTIME_MS) {
+                return;
+            }
+        }
+
+        try {
+            const response = await requestIncreasePostViewCount(postId);
+            const currentView = Number(postViewCountLabel.textContent);
+            postViewCountLabel.textContent = currentView + 1;
+
+            coolTimeMap[postIdStr] = now;
+            saveViewCoolTimeMapToStorage(coolTimeMap);
+
+        } catch (error) {
+            if (error instanceof ApiError) {
+
+            }
+        }
+    }
+
+
+    async function requestPostLikeChange() {
+        const userId = localStorage.getItem('currentUserId');
+        if (!userId) return;
+
+        const postIdStr = String(postId);
+        const isActive = likeBox.classList.contains('like');
+
+        if (!wasLikedInitially && isActive) {
+            await requestPostLike(postId, userId);
+
+            if (!likedPostIds.includes(postIdStr)) {
+                likedPostIds.push(postIdStr);
+            }
+            localStorage.setItem('likedPostId', likedPostIds.join(','));
+            return;
+        }
+
+        if (wasLikedInitially && !isActive) {
+            await requestPostLikeCancel(postId, userId);
+
+            const deleteIndex = likedPostIds.indexOf(postIdStr);
+            if (deleteIndex !== -1) {
+                likedPostIds.splice(deleteIndex, 1);
+            }
+            localStorage.setItem('likedPostId', likedPostIds.join(','));
+            return;
+        }
+    }
     // 뒤로 가기 버튼
     backToListButton.addEventListener('click', () => {
+        requestPostLikeChange();
         const nowCommentCount = Number(commentCountLabel.textContent);
         const nowViewCount = Number(postViewCountLabel.textContent);
         const nowLikeCount = Number(postLikeLabel.textContent);
         emit('post:backToList', { postId, nowCommentCount, nowViewCount, nowLikeCount });
-    })
 
-    // 게시글 좋아요 클릭 이벤트
-    likeBox.addEventListener('click', async (event) => {
-        event.preventDefault();
-        await handlePostLikeRequest()
     })
 
     // 댓글 생성 시 댓글 수 증가 핸들러
@@ -110,52 +191,33 @@ export async function post(postId) {
     eventBus.addEventListener('post:deleteComment', handleDeleteComment)
 
 
-    postUpdateButton.addEventListener('click', (event) => {
-        event.preventDefault();
-
-        eventBus.removeEventListener('post:createComment', handleCreateComment);
-        eventBus.removeEventListener('post:deleteComment', handleDeleteComment);
-
-        const editPostComponent = editPost({ id, title, article, articleImage, category });
-        root.innerHTML = '';
-        root.appendChild(editPostComponent);
-    })
-
-    postDeleteButton.addEventListener('click', (event) => {
-        event.preventDefault();
-        handlePostDelete()
-    })
-
-
     // 게시글 좋아요 클릭 핸들러
-    async function handlePostLikeRequest() {
-        if (isLiking) return;
-        isLiking = true;
+    async function handlePostLikeBoxUpdate() {
+        const currentLikeCount = Number(postLikeLabel.textContent);
+        const isActive = likeBox.classList.contains('like');
 
-        try {
-            const userId = localStorage.getItem('currentUserId');
-            const currentLikeCount = Number(postLikeLabel.textContent);
-
-            const isActive = likeBox.classList.contains('like');
-
+        if (isLikedPost) {
             if (isActive) {
-                await requestPostLikeCancel(postId, userId);
                 likeBox.classList.remove('like');
                 postLikeLabel.textContent = currentLikeCount - 1;
+                isLikedPost = false;
             } else {
-                await requestPostLike(postId, userId);
+
+            }
+        } else {
+            if (!isActive) {
                 likeBox.classList.add('like');
                 postLikeLabel.textContent = currentLikeCount + 1;
+                isLikedPost = true;
             }
-
-        } catch (error) {
-            if (error instanceof ApiError) {
-
-            }
-        } finally {
-            isLiking = false;
         }
     }
+
+    // 게시글 좋아요 클릭 이벤트
+    likeBox.addEventListener('click', (event) => {
+        event.preventDefault();
+        handlePostLikeBoxUpdate()
+    })
 
     // 게시글 삭제 확인 모달창 핸들러
     function handlePostDelete() {
@@ -178,5 +240,21 @@ export async function post(postId) {
         const modalComponent = modal(modalLogic);
         document.body.appendChild(modalComponent);
     }
+
+    postUpdateButton.addEventListener('click', (event) => {
+        event.preventDefault();
+
+        eventBus.removeEventListener('post:createComment', handleCreateComment);
+        eventBus.removeEventListener('post:deleteComment', handleDeleteComment);
+
+        const editPostComponent = editPost({ id, title, article, articleImage, category });
+        root.innerHTML = '';
+        root.appendChild(editPostComponent);
+    })
+
+    postDeleteButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        handlePostDelete()
+    })
     return root;
 }

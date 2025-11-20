@@ -133,3 +133,15 @@ export async function requestEditPost(postId, title, article, oldFileName, artic
 
     return response;
 }
+
+// 게시글 조회 수 증가 요청
+export async function requestIncreasePostViewCount(postId) {
+    const response = await new Api()
+        .post()
+        .url(apiPath.INCREASE_POST_VIEW_COUNT_API_URL(postId))
+        .body({})
+        .print()
+        .request();
+
+    return response;
+}

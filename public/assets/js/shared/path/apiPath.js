@@ -28,6 +28,7 @@ export const apiPath = {
     POST_LIKE_CANCEL_API_URL: (postId) => `/post/${postId}/like/cancel`,
     DELETE_POST_API_URL: (postId) => `/post/${postId}`,
     EDIT_POST_API_URL: (postId) => `/post/${postId}`,
+    INCREASE_POST_VIEW_COUNT_API_URL: (postId) => `/post/${postId}/hit`,
 
     // Comment
     CREATE_COMMENT_API_URL: (postId) => `/post/${postId}/comment`,
