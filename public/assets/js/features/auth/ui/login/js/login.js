@@ -157,16 +157,5 @@ export function login() {
         navigate('/signup');
     })
 
-
-
-
-
-
-
-
-
-
-
-
     return root;
 }

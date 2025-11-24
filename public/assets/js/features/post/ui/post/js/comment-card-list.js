@@ -40,66 +40,70 @@ export function commentCardList(postId) {
         </div>
         `;
 
-    // 옵저버 감지 대상 박스 생성 - sentinel
-    const sentinel = document.createElement('div');
-    sentinel.className = 'comment-card-list-sentinel';
-    root.appendChild(sentinel);
-
-
-    addObserver(); // 옵저버 등록
-    loadNextPage(); // 초기 페이지 렌더링
-
     const form = root.querySelector('#comment-form');
     const commentTextArea = root.querySelector('#comment-form-content');
     const commentCreateButton = root.querySelector('#comment-form-create-btn');
     const commentUpdateButton = root.querySelector('#comment-form-update-btn');
     const commentListWrapper = root.querySelector('.comment-card-list-wrapper');
 
-    // 댓글 생성 버튼 클릭 이벤트
-    form.addEventListener('submit', async (event) => {
-        event.preventDefault();
 
-        if (isEditMode) {
-            await handleUpdateCommentRequest();
-        } else {
-            await handleCreateCommentRequest();
+    // 옵저버 감지 대상 박스 생성 - sentinel
+    const sentinel = document.createElement('div');
+    sentinel.className = 'comment-card-list-sentinel';
+    root.appendChild(sentinel);
+
+    let nowObserver = null;
+    addObserver(); // 옵저버 등록
+    loadNextPage(); // 초기 페이지 렌더링
+
+    // 무한 스크롤용 옵저버 추가
+
+    function addObserver() {
+        nowObserver = new IntersectionObserver(async (entries) => {
+            const entry = entries[0];
+            if (entry.isIntersecting && !isLoading && hasNext) {
+                await loadNextPage();
+            }
+        }, { threshold: 0.5 });
+
+        nowObserver.observe(sentinel);
+    }
+
+    // 무한 스크롤 페이지 로딩 함수
+    async function loadNextPage() {
+        try {
+            if (isLoading || !hasNext) {
+                return;
+            }
+
+            isLoading = true;
+
+            const response = await requestFindComments(postId, currentPage, size);
+            const responseBody = response.data;
+            console.log(responseBody);
+
+            // 댓글 컴포넌트 렌더링, 삽입
+            const contents = responseBody.contents;
+            const fragment = document.createDocumentFragment();
+            contents.forEach((item) => {
+                fragment.append(comment(item, postId));
+            });
+            root.insertBefore(fragment, sentinel);
+
+            // 다음 로드 페이지 미리 계산
+            currentPage = responseBody.currentPage + 1;
+            // 다음 페이지 여부
+            hasNext = responseBody.hasNext;
+        } catch (error) {
+            if (error instanceof ApiError) {
+
+            }
+        } finally {
+            isLoading = false;
         }
-    })
+    }
 
-    // 댓글 입력 창 입력 감지
-    commentTextArea.addEventListener('input', () => {
-        activeCommentSubmitButton();
-    })
-    // 댓글 입력 창 블러 이벤트 등록
-    commentTextArea.addEventListener('blur', () => {
-        activeCommentSubmitButton();
-    })
-
-    // 댓글 삭제 이벤트 시 삭제 대상 댓글 컨테이너 삭제
-    eventBus.addEventListener('post:deleteComment', (event, options) => {
-        const deletedComment = event.detail.element;
-        root.removeChild(deletedComment);
-    })
-
-    // 댓글 수정 모드 변경 이벤트 등록
-    eventBus.addEventListener('post:startEditComment', (event, options) => {
-        const { commentId, content, element } = event.detail;
-
-        isEditMode = true;
-        editingCommentId = commentId;
-        editingCommentElement = element;
-
-        commentTextArea.value = content;
-        commentTextArea.focus();
-
-        commentCreateButton.style.display = 'none';
-        commentUpdateButton.style.display = 'inline-block';
-
-        activeCommentSubmitButton();
-    })
-
-    // 핸들러 함수
-    // 1. 댓글 업데이트 요청 핸들러
+    // 댓글 업데이트 요청 핸들러
     async function handleUpdateCommentRequest() {
         if (!isEditMode || !editingCommentId || !editingCommentElement) {
             return;
@@ -124,7 +128,7 @@ export function commentCardList(postId) {
         }
     }
 
-    // 2. 수정 모드 초기화
+    // 수정 모드 초기화
     function resetEditMode() {
         isEditMode = false;
         editingCommentId = null;
@@ -138,7 +142,7 @@ export function commentCardList(postId) {
         activeCommentSubmitButton();
     }
 
-    // 3. 댓글 생성 요청 핸들러
+    // 댓글 생성 요청 핸들러
     async function handleCreateCommentRequest() {
         if (commentCreateButton.disabled) return;
 
@@ -169,56 +173,18 @@ export function commentCardList(postId) {
         }
     }
 
-    // 4. 무한 스크롤용 옵저버 추가
-    function addObserver() {
-        const observer = new IntersectionObserver(async (entries) => {
-            const entry = entries[0];
-            if (entry.isIntersecting && !isLoading && hasNext) {
-                await loadNextPage();
-            }
-        }, { threshold: 0.5 });
+    // 댓글 생성 버튼 클릭 이벤트
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
 
-        observer.observe(sentinel);
-    }
-
-    // 5. 무한 스크롤 페이지 로딩 함수
-    async function loadNextPage() {
-        const now = Date.now();
-        try {
-            if (isLoading || !hasNext) {
-                return;
-            }
-
-            isLoading = true;
-
-            const response = await requestFindComments(postId, currentPage, size);
-            const responseBody = response.data;
-            console.log(responseBody);
-
-            // 댓글 컴포넌트 렌더링, 삽입
-            const contents = responseBody.contents;
-            const fragment = document.createDocumentFragment();
-            contents.forEach((item) => {
-                fragment.append(comment(item.postId));
-            });
-            root.insertBefore(fragment, sentinel);
-
-            // 다음 로드 페이지 미리 계산
-            currentPage = responseBody.currentPage + 1;
-            // 다음 페이지 여부
-            hasNext = responseBody.hasNext;
-        } catch (error) {
-            if (error instanceof ApiError) {
-
-            }
-        } finally {
-            const diff = now - Date.now();
-            console.log(diff);
-            isLoading = false;
+        if (isEditMode) {
+            await handleUpdateCommentRequest();
+        } else {
+            await handleCreateCommentRequest();
         }
-    }
+    })
 
-    // 6. 댓글 생성, 수정 버튼 활성화 검사 핸들러
+    // 댓글 생성, 수정 버튼 활성화 검사 핸들러
     function activeCommentSubmitButton() {
         const content = String(commentTextArea.value).trim();
         const isFilled = !isBlank(content);
@@ -236,5 +202,60 @@ export function commentCardList(postId) {
         targetButton.classList.add('active');
         targetButton.disabled = false;
     }
+
+    // 댓글 입력 창 입력 감지
+    commentTextArea.addEventListener('input', () => {
+        activeCommentSubmitButton();
+    })
+
+    // 댓글 입력 창 블러 이벤트 등록
+    commentTextArea.addEventListener('blur', () => {
+        activeCommentSubmitButton();
+    })
+
+
+    function deleteCommentHandler(event) {
+        const deletedComment = event.detail.element;
+        root.removeChild(deletedComment);
+    }
+    // 댓글 삭제 이벤트 시 삭제 대상 댓글 컨테이너 삭제
+    eventBus.addEventListener('post:deleteComment', deleteCommentHandler)
+
+
+    function startEditCommentHandler(event) {
+        const { commentId, content, element } = event.detail;
+
+        isEditMode = true;
+        editingCommentId = commentId;
+        editingCommentElement = element;
+
+        commentTextArea.value = content;
+        commentTextArea.focus();
+
+        commentCreateButton.style.display = 'none';
+        commentUpdateButton.style.display = 'inline-block';
+
+        activeCommentSubmitButton();
+    }
+    // 댓글 수정 모드 변경 이벤트 등록
+    eventBus.addEventListener('post:startEditComment', startEditCommentHandler);
+
+
+    const customEvent = [
+        { type: 'post:deleteComment', handler: deleteCommentHandler },
+        { type: 'post:startEditComment', handler: startEditCommentHandler },
+    ]
+
+    root.cleanUp = function () {
+        customEvent.forEach((customEvent) => {
+            eventBus.removeEventListener(customEvent.type, customEvent.handler);
+        })
+        // 옵저버 지우기
+        if (nowObserver) {
+            nowObserver.disconnect();
+            nowObserver = null;
+        }
+    }
+
     return root;
 }

@@ -59,122 +59,7 @@ export async function editProfile() {
     // 닉네임 중복 여부
     let isDuplicatedNickname = false;
 
-    // 회원 프로필 수정하기 버튼 클릭 이벤트
-    form.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        handleEditProfileRequest();
-    })
-
-    // 회원 프로필 이미지 업로드 버튼 클릭 -> 프로필 이미지 input 태그 이벤트 전달
-    profileImageUploadButton.addEventListener('click', () => {
-        profileImageInput.click();
-    })
-
-    // 회원 프로필 이미지 변경 이벤트
-    profileImageInput.addEventListener('change', () => {
-        handleProfileImageInput();
-    })
-    // 닉네임 input 이벤트 발생 -> 닉네임 패턴 검사
-    nicknameInput.addEventListener('input', () => {
-        handleInvalidNicknamePattern();
-        isDuplicatedNickname = false;
-        activeProfileUpdateButton();
-    })
-
-    //  닉네임 유효성 검증 완료해야 닉네임 중복 검사 API 요청
-    nicknameInput.addEventListener('blur', async () => {
-        const isValidNicknamePattern = handleInvalidNicknamePattern();
-
-        if (!isValidNicknamePattern) {
-            return;
-        }
-        await handleNicknameDuplication();
-        activeProfileUpdateButton();
-    })
-
-    // 수정완료 버튼 클릭 시 게시글 목록 화면으로 이동
-    toPostListLink.addEventListener('click', () => {
-        navigate('/post');
-    })
-
-    // 회원탈퇴하기 버튼 클릭시 모달 창 렌더링
-    unsubscribeLink.addEventListener('click', () => {
-        handleUnsubscribeUser();
-    })
-
-
-    // 핸들러 함수
-    // 1. 프로필 업데이트 활성화 함수
-    function activeProfileUpdateButton() {
-        const nickname = String(nicknameInput.value).trim();
-        const isFilled = !isBlank(nickname);
-
-        if (!isFilled) {
-            profileUpdateButton.classList.remove('active');
-            profileUpdateButton.disabled = true;
-            return;
-        }
-
-        const isAvailableNickname = !isDuplicatedNickname;
-        const canActive = isAvailableNickname;
-
-        profileUpdateButton.classList.toggle('active', canActive);
-        profileUpdateButton.disabled = !canActive;
-    }
-
-    // 2. 닉네임 유효성 검증 핸들러
-    function handleInvalidNicknamePattern() {
-        const nickname = (nicknameInput.value).trim();
-
-        if (isBlank(nickname)) {
-            helpertext.textContent = '닉네임을 입력해주세요'
-            return false;
-        }
-
-        if (isOverMaxLength(nickname, 10)) {
-            helpertext.textContent = '닉네임은 최대 10자까지 작성 가능합니다.'
-            return false;
-        }
-
-        helpertext.textContent = '';
-        return true;
-    }
-
-    // 3. 닉네임 중복 검사 핸들러
-    async function handleNicknameDuplication() {
-        const nickname = String(nicknameInput.value).trim();
-
-        const response = await requestNicknameDuplication(nickname);
-        const responseBody = response.data;
-        const isDuplicate = !responseBody.available;
-
-        isDuplicatedNickname = isDuplicate;
-
-        if (isDuplicate) {
-            helpertext.textContent = '중복된 닉네임입니다.';
-            return false;
-        }
-
-        // helpertext.textContent = '';
-        return true;
-    }
-
-    // 4. 프로필 이미지 변경 핸들러
-    function handleProfileImageInput() {
-        const file = profileImageInput.files[0];
-        if (!isFile(file)) {
-            helpertext.textContent = '이미지 파일만 업로드 가능합니다.'
-            return;
-        }
-
-        helpertext.textContent = '';
-
-        const url = URL.createObjectURL(file);
-        profileImagePreview.src = url;
-        return true;
-    }
-
-    // 5. 회원 프로필 수정 요청 핸들러
+    // 회원 프로필 수정 요청 핸들러
     async function handleEditProfileRequest() {
         if (profileUpdateButton.disabled) return;
 
@@ -208,6 +93,131 @@ export async function editProfile() {
             activeProfileUpdateButton();
         }
     }
+
+    // 회원 프로필 수정하기 버튼 클릭 이벤트
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        handleEditProfileRequest();
+    })
+
+    // 회원 프로필 이미지 업로드 버튼 클릭 -> 프로필 이미지 input 태그 이벤트 전달
+    profileImageUploadButton.addEventListener('click', () => {
+        profileImageInput.click();
+    })
+
+
+    // 프로필 이미지 변경 핸들러
+    function handleProfileImageInput() {
+        const file = profileImageInput.files[0];
+        if (!isFile(file)) {
+            helpertext.textContent = '이미지 파일만 업로드 가능합니다.'
+            return;
+        }
+
+        helpertext.textContent = '';
+
+        const url = URL.createObjectURL(file);
+        profileImagePreview.src = url;
+        return true;
+    }
+
+    // 회원 프로필 이미지 변경 이벤트
+    profileImageInput.addEventListener('change', () => {
+        handleProfileImageInput();
+    })
+
+    // 닉네임 유효성 검증 핸들러
+    function handleInvalidNicknamePattern() {
+        const nickname = (nicknameInput.value).trim();
+
+        if (isBlank(nickname)) {
+            helpertext.textContent = '닉네임을 입력해주세요'
+            return false;
+        }
+
+        if (isOverMaxLength(nickname, 10)) {
+            helpertext.textContent = '닉네임은 최대 10자까지 작성 가능합니다.'
+            return false;
+        }
+
+        helpertext.textContent = '';
+        return true;
+    }
+
+    // 프로필 업데이트 활성화 함수
+    function activeProfileUpdateButton() {
+        const nickname = String(nicknameInput.value).trim();
+        const isFilled = !isBlank(nickname);
+
+        if (!isFilled) {
+            profileUpdateButton.classList.remove('active');
+            profileUpdateButton.disabled = true;
+            return;
+        }
+
+        const isAvailableNickname = !isDuplicatedNickname;
+        const canActive = isAvailableNickname;
+
+        profileUpdateButton.classList.toggle('active', canActive);
+        profileUpdateButton.disabled = !canActive;
+    }
+
+    // 닉네임 input 이벤트 발생 -> 닉네임 패턴 검사
+    nicknameInput.addEventListener('input', () => {
+        handleInvalidNicknamePattern();
+        isDuplicatedNickname = false;
+        activeProfileUpdateButton();
+    })
+
+
+    // 닉네임 중복 검사 핸들러
+    async function handleNicknameDuplication() {
+        const nickname = String(nicknameInput.value).trim();
+
+        const response = await requestNicknameDuplication(nickname);
+        const responseBody = response.data;
+        const isDuplicate = !responseBody.available;
+
+        isDuplicatedNickname = isDuplicate;
+
+        if (isDuplicate) {
+            helpertext.textContent = '중복된 닉네임입니다.';
+            return false;
+        }
+
+        return true;
+    }
+
+    //  닉네임 유효성 검증 완료해야 닉네임 중복 검사 API 요청
+    nicknameInput.addEventListener('blur', async () => {
+        const isValidNicknamePattern = handleInvalidNicknamePattern();
+
+        if (!isValidNicknamePattern) {
+            return;
+        }
+        await handleNicknameDuplication();
+        activeProfileUpdateButton();
+    })
+
+    // 수정완료 버튼 클릭 시 게시글 목록 화면으로 이동
+    toPostListLink.addEventListener('click', () => {
+        navigate('/post');
+    })
+
+    // 회원탈퇴하기 버튼 클릭시 모달 창 렌더링
+    unsubscribeLink.addEventListener('click', () => {
+        handleUnsubscribeUser();
+    })
+
+
+
+
+
+
+
+
+
+
 
     // 6. 회원 탈퇴 모달창 핸들러
     function handleUnsubscribeUser() {

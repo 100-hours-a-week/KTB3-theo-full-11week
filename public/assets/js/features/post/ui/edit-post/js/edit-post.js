@@ -59,83 +59,6 @@ export function editPost(post) {
     const editPostButton = root.querySelector('#edit-post-btn');
     const fileText = root.querySelector('.edit-post-file-text');
 
-    form.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        await handleEditPostRequest();
-        const toastLogic = {
-            title: "수정 완료",
-            buttonTitle: "게시글 목록으로 이동",
-            buttonLogic: function () {
-                navigate('/post');
-            }
-        }
-        const toastComponent = toast(toastLogic);
-        document.body.appendChild(toastComponent);
-    })
-
-
-    // 게시글 제목 Input 태그 이벤트 등록
-    titleInput.addEventListener('input', () => {
-        handleTitleLength();
-        handleTitleAndArticleBlank();
-        activeEditPostButton();
-    })
-
-    // 게시글 본문 textarea 태그 이벤트 등록
-    articleInput.addEventListener('input', () => {
-        handleTitleAndArticleBlank();
-        activeEditPostButton();
-    })
-
-    // 게시글 이미지 파일 변경 이벤트
-    fileInput.addEventListener('change', () => {
-        const file = fileInput.files[0];
-
-        if (file) {
-            fileText.textContent = file.name;
-        } else {
-            fileText.textContent = articleImage || '파일을 선택해주세요';
-        }
-    })
-
-    // 핸들러 함수
-    // 1. 게시글 수정 요청 버튼 활성화
-    function activeEditPostButton() {
-        const title = String(titleInput.value).trim();
-        const article = String(articleInput.value).trim();
-        const isFilled = !isBlank(title) && !isBlank(article);
-
-        if (!isFilled) {
-            editPostButton.classList.remove('active');
-            editPostButton.disabled = true;
-            return;
-        }
-
-        const canActive = !isOverMaxLength(title, 26) && isFilled;
-        editPostButton.classList.toggle('active', canActive);
-        editPostButton.disabled = !canActive;
-    }
-
-    // 2. 게시글 제목, 본문 내용 작성 여부 확인 핸들러
-    function handleTitleAndArticleBlank() {
-        const title = String(titleInput.value).trim();
-        const article = String(articleInput.value).trim();
-        if (isBlank(title) && isBlank(article)) {
-            helperText.textContent = '제목, 내용을 모두 작성해주세요.'
-            return;
-        }
-    }
-
-    // 3. 게시글 제목 길이 확인 핸들러
-    function handleTitleLength() {
-        const title = String(titleInput.value).trim();
-        if (isOverMaxLength(title, 26)) {
-            helperText.textContent = '제목은 최대 26자 입니다.';
-            return;
-        } else {
-            helperText.textContent = '';
-        }
-    }
 
     // 4. 게시글 수정 요청 핸들러
     async function handleEditPostRequest() {
@@ -159,6 +82,92 @@ export function editPost(post) {
             activeEditPostButton();
         }
     }
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        await handleEditPostRequest();
+        const toastLogic = {
+            title: "수정 완료",
+            buttonTitle: "게시글 목록으로 이동",
+            buttonLogic: function () {
+                navigate('/post');
+            }
+        }
+        const toastComponent = toast(toastLogic);
+        document.body.appendChild(toastComponent);
+    })
+
+
+    // 게시글 제목 길이 확인 핸들러
+    function handleTitleLength() {
+        const title = String(titleInput.value).trim();
+        if (isOverMaxLength(title, 26)) {
+            helperText.textContent = '제목은 최대 26자 입니다.';
+            return;
+        } else {
+            helperText.textContent = '';
+        }
+    }
+
+    // 게시글 제목, 본문 내용 작성 여부 확인 핸들러
+    function handleTitleAndArticleBlank() {
+        const title = String(titleInput.value).trim();
+        const article = String(articleInput.value).trim();
+        if (isBlank(title) && isBlank(article)) {
+            helperText.textContent = '제목, 내용을 모두 작성해주세요.'
+            return;
+        }
+    }
+
+    // 게시글 수정 요청 버튼 활성화
+    function activeEditPostButton() {
+        const title = String(titleInput.value).trim();
+        const article = String(articleInput.value).trim();
+        const isFilled = !isBlank(title) && !isBlank(article);
+
+        if (!isFilled) {
+            editPostButton.classList.remove('active');
+            editPostButton.disabled = true;
+            return;
+        }
+
+        const canActive = !isOverMaxLength(title, 26) && isFilled;
+        editPostButton.classList.toggle('active', canActive);
+        editPostButton.disabled = !canActive;
+    }
+
+    // 게시글 제목 Input 태그 이벤트 등록
+    titleInput.addEventListener('input', () => {
+        handleTitleLength();
+        handleTitleAndArticleBlank();
+        activeEditPostButton();
+    })
+
+    // 게시글 본문 textarea 태그 이벤트 등록
+    articleInput.addEventListener('input', () => {
+        handleTitleAndArticleBlank();
+        activeEditPostButton();
+    })
+
+    function handleFileChange() {
+        const file = fileInput.files[0];
+
+        if (file) {
+            fileText.textContent = file.name;
+        } else {
+            fileText.textContent = articleImage || '파일을 선택해주세요';
+        }
+    }
+    // 게시글 이미지 파일 변경 이벤트
+    fileInput.addEventListener('change', handleFileChange);
+
+
+
+
+
+
+
+
 
 
 

@@ -52,38 +52,29 @@ export function makePost() {
     const helperText = root.querySelector('#make-post-form-helper-text');
     const makePostButton = root.querySelector('#make-post-btn');
 
-    // 이벤트 리스너 등록
-    // 1. 게시글 제목 Input 태그 이벤트 등록
-    titleInput.addEventListener('input', () => {
-        handleTitleLength();
-        handleTitleAndArticleBlank();
-        activeMakePostButton();
-    })
 
-    // 2. 게시글 이미지 Input태그 이벤트 등록
-    articleImageInput.addEventListener('change', () => {
-        console.log('input');
-        handleArticleImageTitleText();
-    })
+    // 게시글 제목 길이 확인 핸들러
+    function handleTitleLength() {
+        const title = String(titleInput.value).trim();
+        if (isOverMaxLength(title, 26)) {
+            helperText.textContent = '제목은 최대 26자 입니다.';
+            return;
+        } else {
+            helperText.textContent = '';
+        }
+    }
 
-    // 2. 게시글 본문 textarea 태그 이벤트 등록
-    articleInput.addEventListener('input', () => {
-        handleTitleAndArticleBlank();
-        activeMakePostButton();
-    })
+    // 게시글 제목, 본문 내용 작성 여부 확인 핸들러
+    function handleTitleAndArticleBlank() {
+        const title = String(titleInput.value).trim();
+        const article = String(articleInput.value).trim();
+        if (isBlank(title) && isBlank(article)) {
+            helperText.textContent = '제목, 내용을 모두 작성해주세요';
+            return;
+        }
+    }
 
-
-    // 3. 게시글 생성 form 이벤트 등록
-    form.addEventListener('submit', (event) => {
-        event.preventDefault();
-        console.log('submit');
-        handleMakePostRequest();
-    })
-
-
-
-    // 이벤트 리스너 콜백 함수
-    // 1. 게시글 등록 버튼 활성화 핸들러
+    // 게시글 등록 버튼 활성화 핸들러
     function activeMakePostButton() {
         const title = String(titleInput.value).trim();
         const article = String(articleInput.value).trim();
@@ -100,33 +91,30 @@ export function makePost() {
         makePostButton.disabled = !canActive;
     }
 
-    // 2. 게시글 제목, 본문 내용 작성 여부 확인 핸들러
-    function handleTitleAndArticleBlank() {
-        const title = String(titleInput.value).trim();
-        const article = String(articleInput.value).trim();
-        if (isBlank(title) && isBlank(article)) {
-            helperText.textContent = '제목, 내용을 모두 작성해주세요';
-            return;
-        }
-    }
+    // 게시글 제목 Input 태그 이벤트 등록
+    titleInput.addEventListener('input', () => {
+        handleTitleLength();
+        handleTitleAndArticleBlank();
+        activeMakePostButton();
+    })
 
-    // 3. 게시글 제목 길이 확인 핸들러
-    function handleTitleLength() {
-        const title = String(titleInput.value).trim();
-        if (isOverMaxLength(title, 26)) {
-            helperText.textContent = '제목은 최대 26자 입니다.';
-            return;
-        } else {
-            helperText.textContent = '';
-        }
-    }
-    return root;
-
-    // 4. 게시글 본문 이미지 제목 표시 핸들러
+    // 게시글 본문 이미지 제목 표시 핸들러
     function handleArticleImageTitleText() {
         const articleImage = articleImageInput.files[0];
         articleImageTitleText.textContent = articleImage.name;
     }
+
+    // 게시글 이미지 Input태그 이벤트 등록
+    articleImageInput.addEventListener('change', () => {
+        handleArticleImageTitleText();
+    })
+
+    // 게시글 본문 textarea 태그 이벤트 등록
+    articleInput.addEventListener('input', () => {
+        handleTitleAndArticleBlank();
+        activeMakePostButton();
+    })
+
 
     // 5. 게시글 생성 요청 핸들러
     async function handleMakePostRequest() {
@@ -161,8 +149,19 @@ export function makePost() {
         }
     }
 
-    // 6. 게시글 생성 실패 핸들러
+    // 게시글 생성 form 이벤트 등록
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        console.log('submit');
+        handleMakePostRequest();
+    })
+
+    // 게시글 생성 실패 핸들러
     function handleMakePostFail(error) {
         helperText.textContent = error.message;
     }
+
+    return root;
+
+
 }

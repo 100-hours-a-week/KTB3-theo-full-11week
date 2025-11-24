@@ -45,16 +45,24 @@ export function postCard(post) {
         emit('post:postCardClick', { postId });
     })
 
-    const type = `post:updatePostCard/${id}`;
+
     function updatePostCardHandler(event) {
         const { nowCommentCount, nowViewCount, nowLikeCount } = event.detail;
         postCardLikeCount.textContent = `좋아요 ${nowLikeCount}`;
         postCardCommentCount.textContent = `댓글 ${nowCommentCount} `;
         postCardViewCount.textContent = `조회 수 ${nowViewCount} `;
 
-        eventBus.removeEventListener(type, updatePostCardHandler);
     }
-    eventBus.addEventListener(type, updatePostCardHandler);
+    eventBus.addEventListener(`post:updatePostCard/${id}`, updatePostCardHandler);
 
+    const customEvent = [
+        { type: `post:updatePostCard/${id}`, handler: updatePostCardHandler }
+    ]
+
+    root.cleanUp = function () {
+        customEvent.forEach((customEvent) => {
+            eventBus.removeEventListener(customEvent.type, customEvent.handler.updatePostCardHandler);
+        })
+    }
     return root;
 }

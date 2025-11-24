@@ -42,54 +42,63 @@ export function postCardList() {
     root.appendChild(listSection);
     root.appendChild(detailSection);
 
+
     // 게시글 목록 화면 옵저버 추가
+    let nowObserver = null;
     addObserver();
     // 초기 페이지 로드
     loadNextPage();
 
-    // postCard 클릭 시 -> 상세 화면으로 전환
-    eventBus.addEventListener('post:postCardClick', async (event, options) => {
+    async function postCardClickHandler(event) {
         const { postId } = event.detail;
         listSection.classList.remove('active');
         const postComponent = await post(postId);
         detailSection.appendChild(postComponent);
         detailSection.classList.add('active');
-    })
+    }
 
-    // PostCar에서 '목록으로'버튼 클릭시 게시글 리스트로 전환
-    eventBus.addEventListener('post:backToList', (event, options) => {
+    // postCard 클릭 시 -> 상세 화면으로 전환
+    eventBus.addEventListener('post:postCardClick', postCardClickHandler);
+
+    function postBackToListHander(event) {
         detailSection.classList.remove('active');
         detailSection.innerHTML = '';
         listSection.classList.add('active');
         const { postId, nowCommentCount, nowViewCount, nowLikeCount } = event.detail;
         emit(`post:updatePostCard/${postId}`, { nowCommentCount, nowViewCount, nowLikeCount });
-    })
+    }
 
-    // 게시글 삭제 시 post Card List에서 삭제
-    eventBus.addEventListener('post:deletePost', (event, options) => {
+    // PostCar에서 '목록으로'버튼 클릭시 게시글 리스트로 전환
+    eventBus.addEventListener('post:backToList', postBackToListHander);
+
+    function deletePostHandler(event) {
         const deletedPostId = event.detail.postId;
         const deletedPostContainer = detailSection.querySelector(`#post-container-${deletedPostId}`);
         detailSection.removeChild(deletedPostContainer);
         listSection.classList.add('active');
         const deletedPostCard = listSection.querySelector(`#post-card-${deletedPostId}`);
+        deletedPostCard.cleanUp();
         listSection.removeChild(deletedPostCard);
-    })
+    }
+
+    // 게시글 삭제 시 post Card List에서 삭제
+    eventBus.addEventListener('post:deletePost', deletePostHandler);
+
 
     // 무한 스크롤용 옵저버 추가
     function addObserver() {
-        const observer = new IntersectionObserver(async (entries) => {
+        nowObserver = new IntersectionObserver(async (entries) => {
             const entry = entries[0];
             if (entry.isIntersecting && !isLoading && hasNext) {
                 await loadNextPage();
             }
         }, { threshold: 0.5 });
 
-        observer.observe(sentinel);
+        nowObserver.observe(sentinel);
     }
 
     // 무한 스크롤 시 페이지 로딩 함수
     async function loadNextPage() {
-        const now = Date.now();
         try {
 
             // 로딩 중이거나 다음 페이지 없으면 페이지 로드 X
@@ -120,11 +129,30 @@ export function postCardList() {
                 // TODO : API 에러 처리
             }
         } finally {
-            const diff = Date.now() - now;
-            console.log(diff);
             isLoading = false;
         }
     }
 
+    const customEvent = [
+        { type: 'post:postCardClick', handler: postCardClickHandler },
+        { type: 'post:backToList', handler: postBackToListHander },
+        { type: 'post:deletePost', handler: deletePostHandler },
+    ]
+
+    root.cleanUp = function () {
+        const cards = root.querySelectorAll('.post-card-container');
+        cards.forEach((card) => {
+            card?.cleanUp?.();
+        })
+
+        customEvent.forEach((customEvent) => {
+            eventBus.removeEventListener(customEvent.type, customEvent.handler);
+        })
+
+        if (nowObserver) {
+            nowObserver.disconnect();
+            nowObserver = null;
+        }
+    }
     return root;
 }

@@ -21,16 +21,20 @@ const routes = [
     { path: "/editpassword", render: editPassword },
 ]
 
+let nowComponent = null;
 // 경로 들어오면 배열에서 Path값 비교해서 맞는 라우터 찾고 없으면 시작 페이지로 이동
 function findRoute(pathname) {
     return routes.find((route) => route.path === pathname) || routes[0];
 }
 
 export async function renderRoute(path) {
+    nowComponent?.cleanUp?.();
+
     const render = findRoute(path).render;
     const root = document.getElementById("app");
     root.innerHTML = '';
     const component = await render();
+    nowComponent = component;
     root.appendChild(component);
 }
 
