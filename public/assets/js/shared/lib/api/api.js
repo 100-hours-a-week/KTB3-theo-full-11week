@@ -1,6 +1,7 @@
 
 import { ApiError } from "./api-error.js";
 import { apiPath } from "../../path/apiPath.js";
+import { accessTokenStore } from "../jwt/access-token.js";
 
 export class Api {
     #method = 'GET';
@@ -79,9 +80,13 @@ export class Api {
     }
 
     buildOptions() {
+        const headers = { ...this.#headers };
+        this.#addAuthorizationHeader(headers);
+
         const options = {
             method: this.#method,
-            headers: this.#headers,
+            headers,
+            credentials: "include",
         }
 
         // GET 요청은 Body 없이 전송
@@ -106,34 +111,55 @@ export class Api {
         const url = this.buildURL();
         const options = this.buildOptions();
 
-        const response = await fetch(url, options);
-        const contentType = response.headers.get('Content-Type') || "";
-        const canHaveJsonBody = ![204, 205].includes(response.status) && contentType.includes('application/json');
-        let data = null;
+        const fetchResponse = await fetch(url, options);
 
-        if (canHaveJsonBody) {
-            try {
-                data = await response.json();
-            } catch (error) {
-                data = null;
-            }
-        }
+        const canHaveJsonBody = this.#canHaveJsonBody(fetchResponse);
 
-        // 4XX, 5XX 응답
-        if (!response.ok) {
-            // api 에러 처리
-            const code = data.code;
-            const status = response.status;
-            const message = data.message;
-            const path = data.path;
-            throw new ApiError(code, status, message, path);
-        }
+        const response = canHaveJsonBody ? await this.#toJson(fetchResponse) : fetchResponse;
 
-        if (canHaveJsonBody) {
-            return data;
-        }
+        this.#throwIfError(fetchResponse, response);
+
         // 2XX 응답
         return response;
 
+    }
+
+    async #toJson(fetchResponse) {
+        return await fetchResponse.json();
+    }
+
+    #throwIfError(fetchResponse, response) {
+        if (!fetchResponse.ok) {
+            // api 에러 처리
+            const code = response.code;
+            const status = fetchResponse.status;
+            const message = response.message;
+            const path = response.path;
+            throw new ApiError(code, status, message, path);
+        }
+    }
+
+    #canHaveJsonBody(fetchResponse) {
+        const contentType = fetchResponse.headers.get('Content-Type') || "";
+        return (![204, 205].includes(fetchResponse.status) && contentType.includes('application/json'));
+    }
+
+    #addAuthorizationHeader(headers) {
+        const accessToken = accessTokenStore.getAccessToken();
+        if (accessToken) {
+            headers['Authorization'] = `Bearer ${accessToken}`;
+        }
+    }
+
+    #updateAccessTokenStore(fetchResponse) {
+        const authorizationHeader = fetchResponse.headers.get('Authorization');
+        if (!authorizationHeader) {
+            return;
+        }
+
+        const [bearer, token] = authorizationHeader.split(' ');
+        if (bearer === 'Bearer' && token) {
+            accessTokenStore.setAccessToken(token);
+        }
     }
 }

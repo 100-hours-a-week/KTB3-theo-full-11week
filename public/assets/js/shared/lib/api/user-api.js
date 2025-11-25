@@ -1,6 +1,20 @@
 import { Api } from "./api.js";
 import { apiPath } from "../../path/apiPath.js";
 
+// 로그인 API 요청
+export async function requestLogin(email, password) {
+    const response = await new Api()
+        .post()
+        .url(apiPath.LOGIN_API_URL)
+        .body({
+            email,
+            password,
+        })
+        .request();
+    return response;
+
+}
+
 // 이메일 중복 검사 요청 API
 export async function requestEmailDuplication(email) {
     const response = await new Api()
@@ -91,18 +105,4 @@ export async function requestEditPassword(userId, password) {
         .request();
 
     return response;
-}
-// 로그인 API 요청
-export async function requestLogin(email, password) {
-    const response = await new Api()
-        .post()
-        .url(apiPath.LOGIN_API_URL)
-        .body({
-            email,
-            password,
-        })
-        .request();
-
-    return response;
-
 }

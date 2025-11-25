@@ -224,6 +224,7 @@ export function signup() {
 
         const response = await requestEmailDuplication(email);
         const responseBody = response.data;
+        console.log(responseBody);
         const isAvailable = responseBody.available;
 
         if (!isAvailable) {
