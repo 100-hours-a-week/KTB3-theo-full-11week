@@ -9,6 +9,7 @@ export const apiPath = {
 
     // Auth
     LOGIN_API_URL: '/auth/access/token',
+    LOGOUT_API_URL: '/auth/logout',
     ACCESS_TOKEN_REFRESH_API_URL: '/auth/access/token/refresh',
 
     //User
