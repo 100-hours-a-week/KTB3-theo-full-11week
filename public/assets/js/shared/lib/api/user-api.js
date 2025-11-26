@@ -14,6 +14,12 @@ export async function requestLogin(email, password) {
     return response;
 
 }
+export async function requestLogout() {
+    await new Api()
+        .post()
+        .url(apiPath.LOGOUT_API_URL)
+        .request();
+}
 
 // 이메일 중복 검사 요청 API
 export async function requestEmailDuplication(email) {
