@@ -18,9 +18,15 @@ export function toast(toastLogic) {
 
     const btn = root.querySelector('#toast-btn');
 
-    btn.addEventListener('click', () => {
+    const handleButtonClick = function () {
         toastLogic.buttonLogic();
+        root.cleanUp();
         root.remove();
-    })
+    }
+    btn.addEventListener('click', handleButtonClick);
+
+    root.cleanUp = function () {
+        btn.removeEventListener('click', handleButtonClick);
+    }
     return root;
 }

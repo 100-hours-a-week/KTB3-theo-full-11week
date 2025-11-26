@@ -57,9 +57,7 @@ export function login() {
             const nickname = responseBody.nickname;
             const profileImage = responseBody.profileImage;
             const likedPostIds = responseBody.likedPostIds;
-            console.log(likedPostIds);
 
-            console.log(responseBody);
             if (isLoginSuccess) {
                 // TODO: 로그인 성공 시 게시글 목록화면으로 라우팅 처리 필요
                 localStorage.setItem('currentUserId', responseBody.id);

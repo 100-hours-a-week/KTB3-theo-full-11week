@@ -75,7 +75,8 @@ export function commonHeader() {
 
     // 유저 로그아웃 시, 헤더 프로필 이미지 변경 및 메뉴 숨기기
     eventBus.addEventListener('user:logout', (event, options) => {
-        updateProfileImage();
+        profileImage.src = '';
+        profileImage.hidden = true;
         hideProfileMenu();
     })
 

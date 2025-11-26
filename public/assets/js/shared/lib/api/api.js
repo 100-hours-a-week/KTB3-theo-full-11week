@@ -2,6 +2,8 @@
 import { ApiError } from "./api-error.js";
 import { apiPath } from "../../path/apiPath.js";
 import { accessTokenStore } from "../jwt/access-token.js";
+import { navigate } from "../router.js";
+import { toast } from "../../ui/toast/js/toast.js";
 
 export class Api {
     #method = 'GET';
@@ -107,7 +109,7 @@ export class Api {
 
     }
 
-    async request() {
+    async request(isRetry = false) {
         const url = this.buildURL();
         const options = this.buildOptions();
 
@@ -118,26 +120,22 @@ export class Api {
 
         const response = canHaveJsonBody ? await this.#toJson(fetchResponse) : fetchResponse;
 
-        this.#throwIfError(fetchResponse, response);
+        if (!fetchResponse.ok) {
+            const status = fetchResponse.status;
+            if (status === 401 && !isRetry) {
+                await this.#refreshAccessTokenRequest();
+                return this.request(true);
+            }
 
+            const { code, message, path } = response;
+            throw new ApiError(code, status, message, path);
+        }
         // 2XX 응답
         return response;
-
     }
 
     async #toJson(fetchResponse) {
         return await fetchResponse.json();
-    }
-
-    #throwIfError(fetchResponse, response) {
-        if (!fetchResponse.ok) {
-            // api 에러 처리
-            const code = response.code;
-            const status = fetchResponse.status;
-            const message = response.message;
-            const path = response.path;
-            throw new ApiError(code, status, message, path);
-        }
     }
 
     #canHaveJsonBody(fetchResponse) {
@@ -162,5 +160,44 @@ export class Api {
         if (bearer === 'Bearer' && token) {
             accessTokenStore.setAccessToken(token);
         }
+    }
+
+    async #refreshAccessTokenRequest() {
+        console.log("엑세스 토큰 재발급");
+        try {
+            await new Api()
+                .post()
+                .url(apiPath.ACCESS_TOKEN_REFRESH_API_URL)
+                .request(true);
+        } catch (error) {
+            if (error instanceof ApiError) {
+                const isRefreshTokenExpired =
+                    (error.status === 401 || error.status === 403);
+
+                if (isRefreshTokenExpired) {
+                    this.#handleRefreshTokenExpired();
+                    return;
+                }
+            }
+        }
+
+
+    }
+
+    #handleRefreshTokenExpired() {
+        const toastLogic = {
+            title: "재로그인이 필요합니다.",
+            buttonTitle: "닫기",
+            buttonLogic: function () {
+                navigate('/logout');
+            }
+        };
+        const toastComponent = toast(toastLogic);
+        document.body.appendChild(toastComponent);
+
+        accessTokenStore.clear?.();
+        console.log("리프레시 토큰 만료");
+        navigate('/logout');
+
     }
 }
