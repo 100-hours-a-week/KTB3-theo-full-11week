@@ -1,11 +1,11 @@
 // API 요청 경로
 export const apiPath = {
-    API_SERVER_URL: 'http://localhost:8080',
+    API_SERVER_URL: 'https://localhost:8443',
 
     // Image Storage
-    PROFILE_IMAGE_STORATE_URL: 'http://localhost:8080/images/profile/',
-    ARTICLE_IMAGE_STORAGE_URL: 'http://localhost:8080/images/article/',
-    TODAY_FISH_LOGO_URL: 'http://localhost:8080/images/logo/',
+    PROFILE_IMAGE_STORATE_URL: 'https://localhost:8443/images/profile/',
+    ARTICLE_IMAGE_STORAGE_URL: 'https://localhost:8443/images/article/',
+    TODAY_FISH_LOGO_URL: 'https://localhost:8443/images/logo/',
 
     // Auth
     LOGIN_API_URL: '/auth/access/token',
