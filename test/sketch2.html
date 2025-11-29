@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>오늘의 수산 - 꽃게 연간 시세 & 실시간 채팅</title>
+    <title>오늘의 수산 - 시세 차트 & 실시간 채팅</title>
     <style>
         :root {
             --color-primary: #1A73E8;
@@ -16,10 +16,6 @@
             --color-border: #E5E7EB;
             --color-text-main: #111827;
             --color-text-muted: #6B7280;
-
-            --accent-up: #2e7d32;
-            --accent-down: #d32f2f;
-
             --shadow-card: 0 14px 30px rgba(15, 23, 42, 0.12);
             --radius-card: 18px;
         }
@@ -41,6 +37,7 @@
             margin: 0 auto;
         }
 
+        /* 헤더 */
         .app-header {
             margin-bottom: 20px;
         }
@@ -92,6 +89,7 @@
             box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35);
         }
 
+        /* 메인 레이아웃 */
         .layout {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -99,6 +97,7 @@
             align-items: stretch;
         }
 
+        /* 카드 공통 */
         .card {
             background: rgba(255, 255, 255, 0.98);
             border-radius: var(--radius-card);
@@ -108,6 +107,7 @@
             backdrop-filter: blur(10px);
         }
 
+        /* 왼쪽: 차트 패널 */
         .chart-header {
             display: flex;
             justify-content: space-between;
@@ -215,58 +215,15 @@
             background: linear-gradient(180deg, var(--color-ocean-soft), #ffffff);
             border-radius: 16px;
             border: 1px solid rgba(226, 232, 240, 0.9);
-            padding: 10px 10px 22px;
+            padding: 10px 10px 12px;
             position: relative;
             overflow: hidden;
         }
 
-        .chart-axis-label-y {
-            position: absolute;
-            left: 8px;
-            top: 50%;
-            transform: rotate(-90deg) translateY(-50%);
-            transform-origin: left center;
-            font-size: 10px;
-            color: var(--color-text-muted);
-            white-space: nowrap;
-        }
-
-        .chart-axis-label-x {
-            position: absolute;
-            left: 50%;
-            bottom: 2px;
-            transform: translateX(-50%);
-            font-size: 10px;
-            color: var(--color-text-muted);
-            white-space: nowrap;
-        }
-
-        .chart-y-labels {
-            position: absolute;
-            left: 44px;
-            top: 20px;
-            bottom: 38px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            font-size: 11px;
-            color: var(--color-text-muted);
-        }
-
-        .chart-x-labels {
-            position: absolute;
-            left: 68px;
-            right: 20px;
-            bottom: 6px;
-            display: flex;
-            justify-content: space-between;
-            font-size: 11px;
-            color: var(--color-text-muted);
-        }
-
+        /* 그리드 라인 */
         .chart-grid {
             position: absolute;
-            inset: 20px 20px 38px 68px;
+            inset: 10px 10px 26px 40px;
             pointer-events: none;
         }
 
@@ -293,61 +250,124 @@
             top: 80%;
         }
 
-        .chart-inner {
-            position: relative;
-            margin-left: 68px;
-            margin-right: 20px;
-            height: 260px;
+        .chart-y-labels {
+            position: absolute;
+            left: 12px;
+            top: 14px;
+            bottom: 28px;
             display: flex;
-            align-items: flex-end;
+            flex-direction: column;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--color-text-muted);
         }
 
+        .chart-x-labels {
+            position: absolute;
+            left: 40px;
+            right: 10px;
+            bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--color-text-muted);
+        }
+
+        /* 캔들 차트 (더미 데이터) */
         .candles {
             position: relative;
-            width: 100%;
-            height: 100%;
+            margin-left: 40px;
+            margin-right: 10px;
+            height: 180px;
             display: flex;
-            align-items: stretch;
-            justify-content: space-between;
-            padding: 0 2px 10px;
-            z-index: 1;
+            align-items: flex-end;
+            gap: 12px;
         }
 
         .candle {
             position: relative;
-            width: 8px;
-            height: 100%;
+            width: 16px;
+            display: flex;
+            justify-content: center;
         }
 
         .candle-wick {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
             width: 2px;
-            background: rgba(30, 64, 175, 0.4);
+            border-radius: 999px;
+            background: rgba(30, 64, 175, 0.35);
         }
 
         .candle-body {
             position: absolute;
-            left: 0;
-            width: 8px;
-            border-radius: 3px;
-            background: var(--accent-up);
-            box-shadow: 0 3px 8px rgba(46, 125, 50, 0.35);
+            bottom: 0;
+            width: 16px;
+            border-radius: 6px;
+            background: linear-gradient(180deg, var(--color-primary-light), var(--color-primary));
+            box-shadow: 0 6px 14px rgba(37, 99, 235, 0.35);
         }
 
         .candle.is-down .candle-body {
-            background: var(--accent-down);
-            box-shadow: 0 3px 8px rgba(211, 47, 47, 0.35);
+            background: linear-gradient(180deg, #fecaca, #f97373);
+            box-shadow: 0 6px 14px rgba(248, 113, 113, 0.35);
         }
 
-        .chart-line-svg {
-            position: absolute;
-            inset: 8px 0 28px 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 2;
+        /* 더미 데이터 느낌용 높이 (대충 등락 표현) */
+        .candle:nth-child(1) .candle-wick {
+            height: 60%;
+        }
+
+        .candle:nth-child(1) .candle-body {
+            height: 40%;
+        }
+
+        .candle:nth-child(2) .candle-wick {
+            height: 70%;
+        }
+
+        .candle:nth-child(2) .candle-body {
+            height: 55%;
+        }
+
+        .candle:nth-child(3) .candle-wick {
+            height: 50%;
+        }
+
+        .candle:nth-child(3) .candle-body {
+            height: 30%;
+        }
+
+        .candle:nth-child(4) .candle-wick {
+            height: 75%;
+        }
+
+        .candle:nth-child(4) .candle-body {
+            height: 60%;
+        }
+
+        .candle:nth-child(5) .candle-wick {
+            height: 55%;
+        }
+
+        .candle:nth-child(5) .candle-body {
+            height: 35%;
+        }
+
+        .candle:nth-child(6) .candle-wick {
+            height: 80%;
+        }
+
+        .candle:nth-child(6) .candle-body {
+            height: 65%;
+        }
+
+        .candle:nth-child(3),
+        .candle:nth-child(5) {
+            /* 3, 5번째를 하락 봉으로 표시 */
+        }
+
+        .candle:nth-child(3).is-down,
+        .candle:nth-child(5).is-down {
+            /* class로 제어 */
         }
 
         .chart-footer {
@@ -377,23 +397,41 @@
             border-radius: 50%;
         }
 
-        .legend-dot.line {
+        .legend-dot.up {
             background: var(--color-primary);
         }
 
-        .legend-dot.up {
-            background: var(--accent-up);
-        }
-
         .legend-dot.down {
-            background: var(--accent-down);
+            background: #f97373;
         }
 
         .chart-meta {
             text-align: right;
         }
 
-        /* 채팅 */
+        /* 더미 데이터 텍스트 */
+        .chart-dummy-data {
+            margin-top: 8px;
+            padding: 8px 10px;
+            border-radius: 10px;
+            background: var(--color-ocean-soft);
+            border: 1px dashed rgba(148, 163, 184, 0.6);
+            font-size: 11px;
+            color: var(--color-text-muted);
+        }
+
+        .chart-dummy-data strong {
+            color: var(--color-primary-deep);
+        }
+
+        .chart-dummy-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 6px;
+            margin-top: 2px;
+        }
+
+        /* 오른쪽: 채팅 패널 */
         .chat-header {
             display: flex;
             justify-content: space-between;
@@ -444,6 +482,7 @@
             align-items: flex-end;
         }
 
+        /* 내가 보낸 메시지: 오른쪽 정렬 */
         .chat-message-row.me {
             flex-direction: row-reverse;
             justify-content: flex-start;
@@ -532,6 +571,7 @@
             box-shadow: 0 6px 16px rgba(37, 99, 235, 0.55);
         }
 
+        /* 반응형 */
         @media (max-width: 960px) {
             body {
                 padding: 16px;
@@ -562,12 +602,13 @@
     <div class="app">
         <header class="app-header">
             <div class="app-title">
-                <h1>오늘의 수산 / 시세 차트</h1>
+                <h1>오늘의 수산 · 시세 차트</h1>
+                <span>실시간 시세 &amp; 채팅</span>
             </div>
             <div class="app-tabs">
-                <button class="app-tab is-active">연간 시세</button>
-                <button class="app-tab">월별 비교</button>
-                <button class="app-tab">도소매 차이</button>
+                <button class="app-tab is-active">실시간 시세</button>
+                <button class="app-tab">도소매 비교</button>
+                <button class="app-tab">즐겨찾기</button>
             </div>
         </header>
 
@@ -578,48 +619,39 @@
                     <div class="chart-symbol">
                         <div class="symbol-title">
                             <div class="symbol-name">꽃게 · 국내산</div>
-                            <div class="symbol-tag">1kg 기준 · 연간 패턴 (샘플)</div>
+                            <div class="symbol-tag">1kg 기준 · 노량진</div>
                         </div>
                         <div class="symbol-price-row">
-                            <div class="symbol-price">26,800원</div>
-                            <div class="symbol-price-change">11월 · 암꽃게 피크 구간</div>
+                            <div class="symbol-price">19,800원</div>
+                            <div class="symbol-price-change">+4.2% · ▲800</div>
                         </div>
                     </div>
 
                     <div class="chart-controls">
                         <div class="chart-toggles">
-                            <button class="chart-toggle-btn is-active">캔들 + 선</button>
-                            <button class="chart-toggle-btn">선만</button>
+                            <button class="chart-toggle-btn is-active">캔들</button>
+                            <button class="chart-toggle-btn">라인</button>
                         </div>
                         <div class="chart-timeframe">
+                            <button class="chart-time-btn">1D</button>
+                            <button class="chart-time-btn is-active">1W</button>
                             <button class="chart-time-btn">1M</button>
                             <button class="chart-time-btn">3M</button>
-                            <button class="chart-time-btn is-active">1Y</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="chart-body">
-                    <div class="chart-axis-label-y">가격 (원/kg)</div>
-                    <div class="chart-axis-label-x">계절 / 월</div>
-
+                    <!-- Y축 라벨 -->
                     <div class="chart-y-labels">
-                        <span>30,000</span>
-                        <span>26,000</span>
+                        <span>24,000</span>
                         <span>22,000</span>
+                        <span>20,000</span>
                         <span>18,000</span>
-                        <span>14,000</span>
+                        <span>16,000</span>
                     </div>
 
-                    <div class="chart-x-labels">
-                        <span>1월</span>
-                        <span>3월</span>
-                        <span>5월</span>
-                        <span>7월</span>
-                        <span>9월</span>
-                        <span>11월</span>
-                    </div>
-
+                    <!-- 그리드 라인 -->
                     <div class="chart-grid">
                         <div class="chart-grid-line"></div>
                         <div class="chart-grid-line"></div>
@@ -627,24 +659,53 @@
                         <div class="chart-grid-line"></div>
                     </div>
 
-                    <div class="chart-inner">
-                        <!-- 캔들들 -->
-                        <div id="candles" class="candles"></div>
+                    <!-- 캔들들 (더미) -->
+                    <div class="candles">
+                        <!-- 월 -->
+                        <div class="candle">
+                            <div class="candle-wick"></div>
+                            <div class="candle-body"></div>
+                        </div>
+                        <!-- 화 -->
+                        <div class="candle">
+                            <div class="candle-wick"></div>
+                            <div class="candle-body"></div>
+                        </div>
+                        <!-- 수 (하락) -->
+                        <div class="candle is-down">
+                            <div class="candle-wick"></div>
+                            <div class="candle-body"></div>
+                        </div>
+                        <!-- 목 -->
+                        <div class="candle">
+                            <div class="candle-wick"></div>
+                            <div class="candle-body"></div>
+                        </div>
+                        <!-- 금 (하락) -->
+                        <div class="candle is-down">
+                            <div class="candle-wick"></div>
+                            <div class="candle-body"></div>
+                        </div>
+                        <!-- 오늘 -->
+                        <div class="candle">
+                            <div class="candle-wick"></div>
+                            <div class="candle-body"></div>
+                        </div>
+                    </div>
 
-                        <!-- 종가 선 -->
-                        <svg class="chart-line-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-                            <polyline id="price-line" fill="none" stroke="#1A73E8" stroke-width="1"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
+                    <!-- X축 라벨 -->
+                    <div class="chart-x-labels">
+                        <span>월</span>
+                        <span>화</span>
+                        <span>수</span>
+                        <span>목</span>
+                        <span>금</span>
+                        <span>오늘</span>
                     </div>
                 </div>
 
                 <div class="chart-footer">
                     <div class="chart-legend">
-                        <span class="legend-item">
-                            <span class="legend-dot line"></span>
-                            <span>종가 선</span>
-                        </span>
                         <span class="legend-item">
                             <span class="legend-dot up"></span>
                             <span>상승 캔들</span>
@@ -655,7 +716,30 @@
                         </span>
                     </div>
                     <div class="chart-meta">
-                        <div>※ 금어기·암꽃게/숫꽃게 수요를 반영한 샘플 더미 데이터입니다.</div>
+                        <div>업데이트 기준 · 2025-11-29 11:02</div>
+                    </div>
+                </div>
+
+                <!-- 더미 OHLC 데이터 요약 -->
+                <div class="chart-dummy-data">
+                    <strong>더미 데이터 (1주 기준 · 단위: 원)</strong>
+                    <div class="chart-dummy-row">
+                        <span>월 O 18,200 · H 20,100 · L 17,900 · C 19,200</span>
+                    </div>
+                    <div class="chart-dummy-row">
+                        <span>화 O 19,200 · H 20,500 · L 18,900 · C 20,000</span>
+                    </div>
+                    <div class="chart-dummy-row">
+                        <span>수 O 20,000 · H 20,300 · L 18,300 · C 18,700 (하락)</span>
+                    </div>
+                    <div class="chart-dummy-row">
+                        <span>목 O 18,800 · H 19,900 · L 18,500 · C 19,300</span>
+                    </div>
+                    <div class="chart-dummy-row">
+                        <span>금 O 19,300 · H 19,700 · L 18,100 · C 18,600 (하락)</span>
+                    </div>
+                    <div class="chart-dummy-row">
+                        <span>오늘 O 18,600 · H 20,200 · L 18,400 · C 19,800</span>
                     </div>
                 </div>
             </section>
@@ -665,182 +749,62 @@
                 <div class="chat-header">
                     <div>
                         <div class="chat-title">실시간 채팅</div>
-                        <div class="chat-info">11월, 암꽃게 피크 시즌 이야기 중</div>
+                        <div class="chat-info">오늘의 꽃게 시세에 대해 이야기를 나눠보세요.</div>
                     </div>
-                    <div class="chat-badge">접속 87명</div>
+                    <div class="chat-badge">접속 128명</div>
                 </div>
 
                 <div class="chat-body">
                     <div class="chat-messages">
                         <div class="chat-message-row">
-                            <div class="chat-avatar">박</div>
+                            <div class="chat-avatar">홍</div>
                             <div>
                                 <div class="chat-bubble">
-                                    지금 11월이라 그런지 암꽃게 알 꽉 찬 거 위주로 경매가가 1kg에 2만 8천까지 찍네요.
-                                    차트상으로도 연중 피크 구간 맞는 듯해요.
+                                    노량진 현장인데요, 방금 1kg에 19,000원에 샀어요. 깔끔한 상품입니다.
                                 </div>
-                                <div class="chat-meta-line">박수산 · 오늘 11:03</div>
+                                <div class="chat-meta-line">홍길동 · 11:01</div>
                             </div>
-                        </div>
-
-                        <div class="chat-message-row">
-                            <div class="chat-avatar">김</div>
-                            <div>
-                                <div class="chat-bubble">
-                                    겨울 금어기 들어가면 한동안 못 먹으니까, 저는 지금 조금 비싸도 암꽃게는 사두는 편이에요.
-                                    봄까지 기다리기 너무 길어요 ㅋㅋ
-                                </div>
-                                <div class="chat-meta-line">김꽃게 · 오늘 11:04</div>
-                            </div>
-                        </div>
-
-                        <!-- 내가 보낸 메시지 -->
-                        <div class="chat-message-row me">
-                            <div>
-                                <div class="chat-bubble">
-                                    차트 보면 겨울 금어기 시즌에 거래가 줄다가, 3~4월 풀리고 나서 한 번 튀고
-                                    여름엔 숫꽃게가 인기를 가져가는 패턴이네요. 9~11월 암꽃게 알 차는 구간이
-                                    진짜 고점 사이클 같아요.
-                                </div>
-                                <div class="chat-meta-line">나 · 오늘 11:05</div>
-                            </div>
-                            <div class="chat-avatar">나</div>
                         </div>
 
                         <div class="chat-message-row">
                             <div class="chat-avatar">이</div>
                             <div>
                                 <div class="chat-bubble">
-                                    맞아요. 알 낳고 나면 암꽃게는 살이 빠져서 여름에는 숫꽃게 위주로 찾게 되더라고요.
-                                    그때는 단가가 조금 내려가서, 회식용으론 여름 숫꽃게도 가성비 괜찮아요.
+                                    어제보다 조금 오른 느낌이네요. 이번 주에 더 오를까요?
                                 </div>
-                                <div class="chat-meta-line">이항구 · 오늘 11:06</div>
+                                <div class="chat-meta-line">이수산 · 11:01</div>
                             </div>
                         </div>
 
-                        <div class="chat-message-row">
-                            <div class="chat-avatar">정</div>
+                        <div class="chat-message-row me">
                             <div>
                                 <div class="chat-bubble">
-                                    금어기 동안 못 먹은 사람들이 봄에 몰려서 그런지, 3~5월 구간도 은근히 세게 나오네요.
-                                    차트 사이클 보니까 이제 사야 할 타이밍이 좀 감이 와요.
+                                    어획량 줄었다는 소식 있어서 단기적으로는 고점일 수도 있을 것 같아요.
                                 </div>
-                                <div class="chat-meta-line">정바다 · 오늘 11:07</div>
+                                <div class="chat-meta-line">나 · 11:02</div>
+                            </div>
+                            <div class="chat-avatar">나</div>
+                        </div>
+
+                        <div class="chat-message-row">
+                            <div class="chat-avatar">박</div>
+                            <div>
+                                <div class="chat-bubble">
+                                    초보인데 오늘 사도 괜찮을까요? 가족 회식용으로 살 예정이에요.
+                                </div>
+                                <div class="chat-meta-line">박초보 · 11:02</div>
                             </div>
                         </div>
                     </div>
 
                     <div class="chat-input-area">
-                        <input class="chat-input" type="text" placeholder="꽃게 시즌, 시세, 맛집 정보를 공유해 보세요!" />
+                        <input class="chat-input" type="text" placeholder="메시지를 입력하세요..." />
                         <button class="chat-send-btn">보내기</button>
                     </div>
                 </div>
             </aside>
         </main>
     </div>
-
-    <script>
-        // ====== 계절 사이클을 반영한 연간 더미 데이터 ======
-        // NUM_POINTS: 한 해를 몇 개의 구간으로 쪼갤지 (여기선 60개, 월당 5개 정도 느낌)
-        const NUM_POINTS = 60;
-
-        // 월별 기본 레벨 (0~1 사이 정규화 값)
-        // 1: 금어기 직후 봄 수요 ↑
-        // 2: 금어기 막바지
-        // 3~5: 봄, 기다린 수요 + 암꽃게
-        // 6~8: 여름, 숫꽃게 인기지만 단가는 봄/가을보단 살짝 낮게
-        // 9~11: 가을~11월, 암꽃게 알 채우면서 다시 피크
-        // 12: 겨울 금어기 들어가며 거래 줄고 패턴 낮아짐
-        const monthlyBase = [
-            0.45, // 1월
-            0.42, // 2월
-            0.60, // 3월
-            0.70, // 4월
-            0.68, // 5월
-            0.60, // 6월
-            0.62, // 7월
-            0.64, // 8월
-            0.68, // 9월
-            0.75, // 10월
-            0.80, // 11월 (암꽃게 피크)
-            0.50  // 12월 (금어기 진입)
-        ];
-
-        function clamp(v, min, max) {
-            return Math.min(max, Math.max(min, v));
-        }
-
-        const candlesData = [];
-
-        for (let i = 0; i < NUM_POINTS; i++) {
-            const monthIndex = Math.floor(i / (NUM_POINTS / 12)); // 0~11
-            const base = monthlyBase[monthIndex];
-
-            // 하루(or 주) 단위 미세 변동
-            const close = clamp(base + (Math.random() - 0.5) * 0.02, 0.3, 0.85);
-            const open = clamp(close + (Math.random() - 0.5) * 0.02, 0.3, 0.85);
-
-            const high = clamp(Math.max(open, close) + Math.random() * 0.015, 0.32, 0.90);
-            const low = clamp(Math.min(open, close) - Math.random() * 0.015, 0.25, 0.80);
-
-            candlesData.push({ open, close, high, low });
-        }
-
-        // 정규화된 0~1 값을 차트 Y좌표(%)로 매핑
-        // 0 -> 아래쪽(90%), 1 -> 위쪽(10%)
-        function mapY(norm) {
-            const top = 10;
-            const bottom = 90;
-            return top + (1 - norm) * (bottom - top);
-        }
-
-        // ====== 종가 선 차트 ======
-        const line = document.getElementById("price-line");
-        const linePoints = candlesData.map((d, idx) => {
-            const x = (idx / (NUM_POINTS - 1)) * 100;
-            const y = mapY(d.close);
-            return `${x.toFixed(2)},${y.toFixed(2)}`;
-        });
-        line.setAttribute("points", linePoints.join(" "));
-
-        // ====== 캔들 차트 ======
-        const candlesContainer = document.getElementById("candles");
-
-        candlesData.forEach((d) => {
-            const { open, close, high, low } = d;
-
-            const isDown = close < open;
-
-            const highY = mapY(high);
-            const lowY = mapY(low);
-            const openY = mapY(open);
-            const closeY = mapY(close);
-
-            const wickTop = highY;
-            const wickHeight = lowY - highY;
-
-            const bodyTop = Math.min(openY, closeY);
-            const bodyBottom = Math.max(openY, closeY);
-            const bodyHeight = bodyBottom - bodyTop;
-
-            const candle = document.createElement("div");
-            candle.className = "candle" + (isDown ? " is-down" : "");
-
-            const wick = document.createElement("div");
-            wick.className = "candle-wick";
-            wick.style.top = `${wickTop}%`;
-            wick.style.height = `${wickHeight}%`;
-
-            const body = document.createElement("div");
-            body.className = "candle-body";
-            body.style.top = `${bodyTop}%`;
-            body.style.height = `${bodyHeight}%`;
-
-            candle.appendChild(wick);
-            candle.appendChild(body);
-            candlesContainer.appendChild(candle);
-        });
-    </script>
 </body>
 
 </html>
