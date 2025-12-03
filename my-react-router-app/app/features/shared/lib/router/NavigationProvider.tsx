@@ -1,0 +1,16 @@
+// app/features/shared/lib/router/NavigationProvider.tsx
+import { useEffect, type ReactNode } from "react";
+import { useNavigate } from "react-router";
+import { setNavigator } from "./navigationService";
+
+export function NavigationProvider({ children }: { children: ReactNode }) {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        setNavigator((to) => {
+            navigate(to as any);
+        });
+    }, [navigate]);
+
+    return <>{children}</>;
+}
