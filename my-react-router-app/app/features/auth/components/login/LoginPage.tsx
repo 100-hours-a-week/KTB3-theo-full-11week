@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { isBetweenLength, isEmail, isValidPasswordPattern, isBlank } from "../../../shared/lib/util/util";
 import { ApiError } from "../../../shared/lib/api/apiError";
 import "../../styles/login/login.css"
-import { requestLogin } from "~/features/shared/lib/api/userApi";
+import { requestLogin } from "~/features/shared/lib/api/user-api";
 import { IntroAnimation } from "~/features/shared/components/intro/IntroAnimation";
 
 type LoginFormValues = {
@@ -13,7 +13,7 @@ type LoginFormValues = {
 }
 export function LoginPage() {
     const navigate = useNavigate();
-    const [serverError, setServerError] = useState("");
+    const [error, setError] = useState("");
     const [showIntro, setShowIntro] = useState(true);
 
     const { register, handleSubmit,
@@ -29,26 +29,36 @@ export function LoginPage() {
     const onSubmit = async () => {
         if (!isValid) return;
 
-        setServerError("");
+        setError("");
 
         try {
             const { email, password } = getValues();
             const response = await requestLogin(email, password);
             const responseBody = response.data;
-            console.log(responseBody)
+            const isLoginSuccess = responseBody.loginSuccess;
+            if (isLoginSuccess) {
+                localStorage.setItem('currentUserId', responseBody.id);
+                localStorage.setItem('nickname', responseBody.nickname);
+                localStorage.setItem('profileImage', responseBody.profileImage);
+                localStorage.setItem('likedPostId', responseBody.likedPostids);
+
+                navigate('/postlist');
+            } else {
+                setError("사용자 정보가 일치하지 않습니다.");
+            }
 
         } catch (error) {
             if (error instanceof ApiError) {
-                setServerError(error.message);
+                setError(error.message);
             } else {
-                setServerError(
+                setError(
                     "로그인 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
                 )
             }
         }
     }
 
-    const helperText = errors.email?.message || errors.password?.message || serverError || "";
+    const helperText = errors.email?.message || errors.password?.message || error || "";
 
     const isButtonActive = isValid && !isSubmitting;
 

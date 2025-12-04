@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { isBetweenLength, isEmail, isFile, isOverMaxLength, isValidPasswordPattern } from '~/features/shared/lib/util/util';
 import { ApiError } from '~/features/shared/lib/api/apiError';
-import { requestEmailDuplication, requestNicknameDuplication, requestSignup } from '~/features/shared/lib/api/userApi';
+import { requestEmailDuplication, requestNicknameDuplication, requestSignup } from '~/features/shared/lib/api/user-api';
 import { toastService } from '~/features/shared/components/toast/toastService';
 
 type SignupFormValues = {

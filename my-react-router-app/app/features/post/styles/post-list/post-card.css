@@ -1,0 +1,107 @@
+/* 카드 리스트에서 카드 하나 감싸는 컨테이너 */
+.post-card-container {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    margin-bottom: 26px;
+}
+
+/* 카드 박스 */
+.post-card-wrapper {
+    width: 100%;
+    max-width: 720px;
+
+    background-color: #ffffff;
+    border-radius: 20px;
+
+    box-shadow: 0 12px 30px rgba(148, 163, 184, 0.25);
+    border: 1px solid #e5e7eb;
+
+    overflow: hidden;
+}
+
+/* 카드 전체를 클릭 영역으로 */
+.post-card-detail-btn {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+
+    text-align: left;
+}
+
+/* 상단 요약 영역 */
+.post-card-summary-field {
+    border-bottom: 1px solid #e5e7eb;
+    padding: 18px 20px 14px;
+}
+
+/* 제목 */
+.post-card-summary-title {
+    margin: 0 0 8px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+/* 좋아요/댓글/조회수/작성일 한 줄 */
+.post-card-summary-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    font-size: 0.82rem;
+    color: #6b7280;
+}
+
+/* 오른쪽 끝으로 밀리는 작성일 */
+.post-card-summary-createdat {
+    margin-left: auto;
+}
+
+/* 좋아요/댓글/조회수는 살짝 pill 느낌 */
+.post-card-summary-like,
+.post-card-summary-comment,
+.post-card-summary-viewcount {
+    padding: 3px 8px;
+    border-radius: 999px;
+    background-color: #eff6ff;
+    color: #1d4ed8;
+}
+
+/* 하단 작성자 영역 */
+.post-card-author-field {
+    display: flex;
+    align-items: center;
+    padding: 14px 20px 16px;
+    gap: 10px;
+}
+
+/* 프로필 동그라미 */
+.post-card-author-profile {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #e5e7eb;
+    flex-shrink: 0;
+}
+
+.post-card-author-profile img {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+
+    display: block;
+    border: none;
+}
+
+/* 닉네임 */
+.post-card-author-nickname {
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: #111827;
+}

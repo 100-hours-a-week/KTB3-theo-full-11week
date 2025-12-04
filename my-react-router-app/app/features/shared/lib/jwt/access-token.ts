@@ -1,20 +1,31 @@
 class AccessTokenStore {
-  private accessToken: string = "";
+  private readonly STORAGE_KEY: string
+    = (typeof import.meta !== "undefined" && import.meta.env.VITE_SESSION_STORAGE_KEY)
+    || "";
 
   getAccessToken(): string {
-    return this.accessToken;
+    if (typeof window === "undefined") {
+      return ""
+    }
+    return sessionStorage.getItem(this.STORAGE_KEY) ?? "";
   }
 
   setAccessToken(accessToken: string): void {
-    this.accessToken = accessToken;
+    if (typeof window === "undefined") {
+      return;
+    }
+    return sessionStorage.setItem(this.STORAGE_KEY, accessToken);
   }
 
   clear(): void {
-    this.accessToken = "";
+    if (typeof window === "undefined") {
+      return;
+    }
+    sessionStorage.removeItem(this.STORAGE_KEY)
   }
 
   hasAccessToken(): boolean {
-    return !!this.accessToken;
+    return !!this.getAccessToken();
   }
 }
 
