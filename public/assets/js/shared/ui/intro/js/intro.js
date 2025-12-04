@@ -32,7 +32,7 @@ export function showIntroAnimation(onFinish) {
 
     const logo = document.createElement('img');
     logo.className = 'intro-logo';
-    logo.src = apiPath.TODAY_FISH_LOGO_URL + imagePath.TODAT_FISH_LOGO_PATH;
+    logo.src = apiPath.TODAY_FISH_LOGO_URL + imagePath.TODAY_FISH_LOGO_PATH;
     logo.alt = '오늘의 물고기 로고';
 
     const text = document.createElement('div');

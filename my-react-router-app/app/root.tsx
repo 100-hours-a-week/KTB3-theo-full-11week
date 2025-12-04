@@ -7,7 +7,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
-import { ToastProvider } from "./features/shared/toast/ToastProvider";
+import { ToastProvider } from "./features/shared/components/toast/ToastProvider";
 import { NavigationProvider } from "./features/shared/lib/router/NavigationProvider";
 import "./root.css";
 

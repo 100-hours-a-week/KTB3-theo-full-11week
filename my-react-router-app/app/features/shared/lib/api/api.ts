@@ -2,7 +2,7 @@
 import { apiPath } from "../path/apiPath";
 import { ApiError } from "./apiError";
 import { accessTokenStore } from "../jwt/access-token";
-import { toastService } from "../../toast/toastService";
+import { toastService } from "../../components/toast/toastService";
 import { navigate } from "../router/navigationService";
 
 type HttpMethod = "GET" | "POST" | "PATCH" | "DELETE";

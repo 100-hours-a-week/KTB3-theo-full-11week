@@ -1,0 +1,164 @@
+/* ===== Intro Splash (파스텔 바다 버전) ===== */
+.intro-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* 인트로 시에만 잠깐 보이는 파스텔 블루 배경 */
+    background: radial-gradient(
+        circle at 50% 0%,
+        rgba(180, 210, 255, 0.95),
+        rgba(120, 160, 220, 0.95)
+    );
+    z-index: 9999;
+    backdrop-filter: blur(3px);
+}
+
+/* 로고 + 텍스트를 세로로 정렬 */
+.intro-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 로고+텍스트+파도가 들어가는 동그란 배지 */
+.intro-circle {
+    position: relative;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    overflow: hidden;
+    transform: translate3d(0, 0, 0);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: radial-gradient(
+        circle at 50% 0%,
+        #e0f2fe,
+        #60a5fa
+    );
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.45);
+
+    opacity: 0;
+    transform: translateY(24px);
+    animation: introSoft 2s ease-out forwards;
+}
+
+/* ✅ 위에 덮는 그라데이션을 훨씬 옅게 (파도 가리지 않게) */
+.intro-circle::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.35),
+        rgba(222, 239, 255, 0) 80%,
+        rgba(255, 255, 255, 0.15)
+    );
+    z-index: 1;
+    pointer-events: none;
+}
+
+.intro-wave {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    /* 🔄 파도 다시 둥근 느낌으로 복구 */
+    width: 320px;
+    height: 320px;
+
+    background: #0ea5e9;
+    border-radius: 43%;
+    opacity: 0.45;
+
+    transform-origin: 50% 48%;
+    animation: drift 6000ms linear infinite;
+
+    z-index: 1; /* 파도는 로고 뒤에 */
+}
+
+.intro-wave.-two {
+    animation-duration: 8000ms;
+    opacity: 0.35;
+    background: #38bdf8;
+}
+
+.intro-wave.-three {
+    animation-duration: 7000ms;
+    opacity: 0.28;
+    background: #22c1f1;
+}
+
+/* 파도 회전 + 물 높이 */
+@keyframes drift {
+    0% {
+        /* ⬇ 두 번째 값(30%)이 물 높이: 값이 커질수록 물이 더 아래로 내려감 */
+        transform: translate(-50%, 20%) rotate(0deg);
+    }
+    100% {
+        transform: translate(-50%, 20%) rotate(360deg);
+    }
+}
+
+
+.intro-logo-group {
+    position: relative;
+    z-index: 2; /* 파도, ::after보다 위 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transform: translateY(-40%);  /* ⬅ 그룹 전체를 위로 10px 올리기 */
+}
+
+/* 로고 스타일 */
+.intro-logo {
+    width: 96px;
+    height: 96px;
+    object-fit: contain;
+}
+
+/* '오늘의 물고기' 텍스트 */
+.intro-text {
+    font-size: 1.9rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    color: #ffffff;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2),
+                 0 0 14px rgba(15, 23, 42, 0.9);
+}
+
+@keyframes introSoft {
+    0% {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+    35% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    70% {
+        opacity: 1;
+        transform: translateY(-2px);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+}
+
+@keyframes introLogoFade {
+    from {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
