@@ -1,8 +1,10 @@
-import { use, useMemo, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
-import { isBetweenLength, isBlank, isEmail, isValidPasswordPattern } from "~/features/shared/lib/util/util";
-
+import { useNavigate } from "react-router-dom";
+import { isBetweenLength, isEmail, isValidPasswordPattern, isBlank } from "../../shared/lib/util/util";
+import { ApiError } from "../../shared/lib/api/apiError";
+import "../styles/login.css";
+import { requestLogin } from "~/features/shared/lib/api/userApi";
 
 type LoginFormValues = {
     email: string,
@@ -27,7 +29,10 @@ export function LoginPage() {
         setServerError("");
 
         try {
-
+            const { email, password } = getValues();
+            const response = await requestLogin(email, password);
+            const responseBody = response.data;
+            console.log(responseBody)
 
         } catch (error) {
             if (error instanceof ApiError) {
