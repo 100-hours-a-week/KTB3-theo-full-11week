@@ -1,4 +1,4 @@
-import "../styles/modal.css";
+import "../../styles/modal/modal.css"
 
 type ModalProps = {
     title: string;
