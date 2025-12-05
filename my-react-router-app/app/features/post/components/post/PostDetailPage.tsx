@@ -12,6 +12,8 @@ import {
 import { apiPath } from "~/features/shared/lib/path/apiPath";
 import { CommentCardList } from "./CommentCardList";
 import "../../styles/post/post-detail.css"
+import { Modal } from "~/features/shared/components/modal/Modal";
+import { toastService, useToast } from "~/features/shared/components/toast/useToast";
 
 const VIEW_COOLTIME_MS = 10_00 * 60;
 const VIEW_COOLTIME_KEY = "postViewCoolTime";
@@ -33,6 +35,7 @@ type PostDetailData = {
 export function PostDetailPage() {
     const { postId } = useParams();
     const navigate = useNavigate();
+    const toast = useToast();
 
     const numericPostId = Number(postId);
     const [post, setPost] = useState<PostDetailData | null>(null);
@@ -48,6 +51,7 @@ export function PostDetailPage() {
     const [currentUserNickname, setCurrentUserNickname] = useState<string | null>(
         null
     );
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
     // 상세 조회
     useEffect(() => {
@@ -190,19 +194,6 @@ export function PostDetailPage() {
         }
     };
 
-    const handleDeletePost = async () => {
-        try {
-            await requestPostDelete(numericPostId);
-            navigate("/postlist");
-        } catch (error) {
-            if (error instanceof ApiError) {
-                setError(error.message);
-            } else {
-                setError("게시글 삭제 중 오류가 발생했습니다.");
-            }
-        }
-    };
-
     const handleIncreaseCommentCount = () => {
         setCommentCount((prev) => prev + 1);
     };
@@ -222,6 +213,32 @@ export function PostDetailPage() {
     if (error || !post) {
         return <div className="post-container">오류 : {error ?? "게시글이 없습니다"}</div>;
     }
+
+    const handleDeleteClick = async () => {
+        try {
+            await requestPostDelete(Number(postId));
+            setIsDeleteModalOpen(false);
+            toast.showToast({
+                title: "게시글 목록 화면으로 돌아갑니다",
+                buttonTitle: "닫기",
+                onClick() {
+                    toastService.clear();
+                    navigate("/postlist");
+                },
+            })
+        } catch (error) {
+            if (error instanceof ApiError) {
+                toast.showToast({
+                    title: error.message,
+                    buttonTitle: "게시글 목록 화면으로 이동",
+                    onClick() {
+                        toastService.clear();
+                        navigate('/postlist')
+                    },
+                })
+            }
+        }
+    };
 
     const {
         id,
@@ -278,7 +295,7 @@ export function PostDetailPage() {
                                     <button
                                         id="post-delete-btn"
                                         className="post-control-btn"
-                                        onClick={handleDeletePost}
+                                        onClick={() => setIsDeleteModalOpen(true)}
                                     >
                                         삭제
                                     </button>
@@ -328,7 +345,15 @@ export function PostDetailPage() {
                     </div>
                 </div>
             </div>
-
+            {isDeleteModalOpen && (
+                <Modal
+                    title="게시글을 삭제하시겠습니까?"
+                    detail="삭제한 게시글은 복구할 수 없습니다."
+                    onCancel={() => setIsDeleteModalOpen(false)}
+                    onConfirm={handleDeleteClick}
+                >
+                </Modal>
+            )}
             <CommentCardList
                 postId={id}
                 onCreate={handleIncreaseCommentCount}
