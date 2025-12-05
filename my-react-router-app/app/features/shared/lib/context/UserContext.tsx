@@ -10,7 +10,7 @@ type User = {
 
 type UserContextValue = {
     user: User | null;
-    setUser: (user: User) => void;
+    setUser: (user: User | null) => void;
 }
 
 const UserContext = createContext<UserContextValue | undefined>(undefined);
