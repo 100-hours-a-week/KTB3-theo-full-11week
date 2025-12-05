@@ -25,6 +25,8 @@
 
     border: 1px solid #e5e7eb;
     box-shadow: 0 12px 30px rgba(148, 163, 184, 0.18);
+    
+    margin-bottom: 2%;
 }
 
 /* 댓글 입력 textarea */
