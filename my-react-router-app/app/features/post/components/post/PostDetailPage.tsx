@@ -3,6 +3,7 @@ import { ApiError } from "~/features/shared/lib/api/apiError";
 import { requestIncreasePostViewCount, requestPostDelete, requestPostDetail, requestPostLike, requestPostLikeCancel } from "~/features/shared/lib/api/post-api";
 import { apiPath } from "~/features/shared/lib/path/apiPath";
 import { EditPost } from "../edit-post/EditPostPage";
+import { CommentCardList } from "./CommentCardList";
 import "../../styles/post/post-detail.css"
 
 const VIEW_COOLTIME_MS = 10_00 * 60;
@@ -210,7 +211,7 @@ export function PostDetailPage({
         setCommentCount((prev) => prev + 1);
     }
 
-    const handelDecreaseCommentCount = () => {
+    const handleDecreaseCommentCount = () => {
         setCommentCount((prev) => Math.max(0, prev - 1));
     }
 
@@ -363,15 +364,11 @@ export function PostDetailPage({
                     </div>
                 </div>
             </div>
-
-            {/* 댓글 리스트 붙이고 싶으면 여기서 */}
-            {/* 
-      <CommentCardList
-        postId={id}
-        onCreate={handleIncreaseCommentCount}
-        onDelete={handleDecreaseCommentCount}
-      />
-      */}
+            <CommentCardList
+                postId={id}
+                onCreate={handleIncreaseCommentCount}
+                onDelete={handleDecreaseCommentCount}
+            />
         </div>
     );
 }
