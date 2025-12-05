@@ -117,7 +117,7 @@ export async function requestMakePost(authorId: number, title: string, article: 
 }
 
 // 게시글 수정 요청 API
-export async function requestEditPost(postId: number, title: string, article: string, oldFileName: string, articleImage: File, category: string) {
+export async function requestEditPost(postId: number, title: string, article: string, oldFileName: string, articleImage: File | null, category: string) {
     const response = await new Api()
         .patch()
         .url(apiPath.EDIT_POST_API_URL(postId))

@@ -1,19 +1,20 @@
+// app/features/post/components/post/PostDetailPage.tsx
 import { useCallback, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { ApiError } from "~/features/shared/lib/api/apiError";
-import { requestIncreasePostViewCount, requestPostDelete, requestPostDetail, requestPostLike, requestPostLikeCancel } from "~/features/shared/lib/api/post-api";
+import {
+    requestIncreasePostViewCount,
+    requestPostDelete,
+    requestPostDetail,
+    requestPostLike,
+    requestPostLikeCancel,
+} from "~/features/shared/lib/api/post-api";
 import { apiPath } from "~/features/shared/lib/path/apiPath";
-import { EditPost } from "../edit-post/EditPostPage";
 import { CommentCardList } from "./CommentCardList";
 import "../../styles/post/post-detail.css"
 
 const VIEW_COOLTIME_MS = 10_00 * 60;
 const VIEW_COOLTIME_KEY = "postViewCoolTime";
-
-type PostSummry = {
-    postId: number;
-    onBack: (handleBackToList: void) => void;
-    onDelete: (handleDeletePost: void) => void;
-}
 
 type PostDetailData = {
     id: number;
@@ -29,22 +30,11 @@ type PostDetailData = {
     category: string;
 };
 
-type PostDetailProps = {
-    postId: number;
-    onBack: (summary: {
-        postId: number;
-        commentCount: number;
-        viewCount: number;
-        likeCount: number;
-    }) => void;
-    onDelete: (postId: number) => void;
-};
+export function PostDetailPage() {
+    const { postId } = useParams();
+    const navigate = useNavigate();
 
-export function PostDetailPage({
-    postId,
-    onBack,
-    onDelete
-}: PostDetailProps) {
+    const numericPostId = Number(postId);
     const [post, setPost] = useState<PostDetailData | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -55,10 +45,14 @@ export function PostDetailPage({
     const [viewCount, setViewCount] = useState(0);
     const [commentCount, setCommentCount] = useState(0);
 
-    const [currentUserNickname, setCurrentUserNickname] = useState<string | null>(null);
-    const [isEditing, setIsEditing] = useState(false);
+    const [currentUserNickname, setCurrentUserNickname] = useState<string | null>(
+        null
+    );
 
+    // 상세 조회
     useEffect(() => {
+        if (!numericPostId) return;
+
         let isMounted = true;
 
         const loadDetail = async () => {
@@ -66,23 +60,22 @@ export function PostDetailPage({
                 setIsLoading(true);
                 setError(null);
 
-                const response = await requestPostDetail(postId);
+                const response = await requestPostDetail(numericPostId);
                 const detail: PostDetailData = response.data;
 
-                if (!isMounted) {
-                    return
-                }
+                if (!isMounted) return;
 
                 setPost(detail);
                 setLikeCount(detail.like);
                 setViewCount(detail.hit);
                 setCommentCount(detail.commentCount);
 
-                const nickname = localStorage.getItem('nickname');
+                const nickname = localStorage.getItem("nickname");
                 setCurrentUserNickname(nickname);
 
-                const likedpostIds = localStorage.getItem('likedPostId')?.split(',') ?? [];
-                const liked = likedpostIds.includes(String(postId));
+                const likedPostIds =
+                    localStorage.getItem("likedPostId")?.split(",") ?? [];
+                const liked = likedPostIds.includes(String(numericPostId));
 
                 setIsLikedPost(liked);
                 setWasLikedInitially(liked);
@@ -93,52 +86,46 @@ export function PostDetailPage({
                     setError("게시글을 불러오는 중 오류가 발생했습니다.");
                 }
             } finally {
-                if (isMounted) {
-                    setIsLoading(false);
-                }
+                if (isMounted) setIsLoading(false);
             }
-        }
+        };
 
         loadDetail();
 
         return () => {
             isMounted = false;
-        }
-    }, [postId]);
+        };
+    }, [numericPostId]);
 
+    // 조회수 증가 (쿨타임)
     useEffect(() => {
-        if (!post) {
-            return
-        }
+        if (!post || !numericPostId) return;
 
-        const postIdStr = String(postId);
+        const postIdStr = String(numericPostId);
         const now = Date.now();
 
-        const getViewCoolTimeMapFromStroage = () => {
+        const getViewCoolTimeMapFromStorage = () => {
             try {
                 const raw = localStorage.getItem(VIEW_COOLTIME_KEY);
-                if (!raw) {
-                    return {};
-                }
+                if (!raw) return {};
                 const parsed = JSON.parse(raw);
                 return typeof parsed === "object" && parsed !== null ? parsed : {};
             } catch {
                 return {};
             }
-        }
+        };
 
         const saveViewCoolTimeMapToStorage = (map: Record<string, number>) => {
             try {
-                localStorage.setItem(VIEW_COOLTIME_KEY, JSON.stringify(map))
-            } catch (error) {
-            }
-        }
+                localStorage.setItem(VIEW_COOLTIME_KEY, JSON.stringify(map));
+            } catch { }
+        };
 
-        const coolTimeMap = getViewCoolTimeMapFromStroage();
-        const lastViewdAt = coolTimeMap[postIdStr];
+        const coolTimeMap = getViewCoolTimeMapFromStorage();
+        const lastViewedAt = coolTimeMap[postIdStr];
 
-        if (typeof lastViewdAt === "number") {
-            const diff = now - lastViewdAt;
+        if (typeof lastViewedAt === "number") {
+            const diff = now - lastViewedAt;
             if (diff < VIEW_COOLTIME_MS) {
                 return;
             }
@@ -146,7 +133,7 @@ export function PostDetailPage({
 
         const increaseViewCount = async () => {
             try {
-                await requestIncreasePostViewCount(postId);
+                await requestIncreasePostViewCount(numericPostId);
                 setViewCount((prev) => prev + 1);
 
                 const newMap = {
@@ -157,24 +144,24 @@ export function PostDetailPage({
             } catch (error) {
                 if (error instanceof ApiError) {
                     setError(error.message);
-                } else {
                 }
             }
-        }
-        increaseViewCount();
-    }, [postId, post]);
-
-    const syncLikeChangeToServer = useCallback(async () => {
-        const userId = Number(localStorage.getItem('currentUserId'));
-        if (!userId) {
-            return
         };
 
-        const postIdStr = String(postId);
-        const likedPostIds = localStorage.getItem("likedPostId")?.split(",").filter(Boolean) ?? [];
+        increaseViewCount();
+    }, [numericPostId, post]);
+
+    // 좋아요 서버 동기화
+    const syncLikeChangeToServer = useCallback(async () => {
+        const userId = Number(localStorage.getItem("currentUserId"));
+        if (!userId || !numericPostId) return;
+
+        const postIdStr = String(numericPostId);
+        const likedPostIds =
+            localStorage.getItem("likedPostId")?.split(",").filter(Boolean) ?? [];
 
         if (!wasLikedInitially && isLikedPost) {
-            await requestPostLike(postId, userId);
+            await requestPostLike(numericPostId, userId);
             if (!likedPostIds.includes(postIdStr)) {
                 likedPostIds.push(postIdStr);
             }
@@ -183,63 +170,61 @@ export function PostDetailPage({
         }
 
         if (wasLikedInitially && !isLikedPost) {
-            await requestPostLikeCancel(postId, userId);
+            await requestPostLikeCancel(numericPostId, userId);
             const filtered = likedPostIds.filter((id) => id !== postIdStr);
             localStorage.setItem("likedPostId", filtered.join(","));
         }
-    }, [postId, isLikedPost, wasLikedInitially])
+    }, [numericPostId, isLikedPost, wasLikedInitially]);
 
     const handleToggleLike = () => {
         setIsLikedPost((prev) => !prev);
         setLikeCount((prev) => (isLikedPost ? prev - 1 : prev + 1));
-    }
+    };
 
-    const handleBackToClick = async () => {
+    const handleBackToList = async () => {
         try {
             await syncLikeChangeToServer();
         } finally {
-            onBack({
-                postId,
-                commentCount,
-                viewCount,
-                likeCount,
-            })
+            // 뒤로가기 없으면 /postlist로
+            if (window.history.length > 1) {
+                navigate(-1);
+            } else {
+                navigate("/postlist");
+            }
         }
-    }
-
-    const handleIncreaseCommentCount = () => {
-        setCommentCount((prev) => prev + 1);
-    }
-
-    const handleDecreaseCommentCount = () => {
-        setCommentCount((prev) => Math.max(0, prev - 1));
-    }
+    };
 
     const handleDeletePost = async () => {
-        // 모달 띄우기
-
         try {
-            await requestPostDelete(postId);
-            onDelete(postId);
+            await requestPostDelete(numericPostId);
+            navigate("/postlist");
         } catch (error) {
             if (error instanceof ApiError) {
                 setError(error.message);
             } else {
-                setError("게시글 삭제 중 오류가 발생했습니다.")
+                setError("게시글 삭제 중 오류가 발생했습니다.");
             }
         }
-    }
+    };
+
+    const handleIncreaseCommentCount = () => {
+        setCommentCount((prev) => prev + 1);
+    };
+
+    const handleDecreaseCommentCount = () => {
+        setCommentCount((prev) => Math.max(0, prev - 1));
+    };
 
     const handleEditPost = () => {
-        setIsEditing(true);
-    }
+        navigate(`/post/${numericPostId}/edit`);
+    };
 
     if (isLoading) {
-        return <div className="post-container">로딩 중...</div>
+        return <div className="post-container">로딩 중...</div>;
     }
 
     if (error || !post) {
-        return <div className="post-container">오류 : {error ?? "게시글이 없습니다"}</div>
+        return <div className="post-container">오류 : {error ?? "게시글이 없습니다"}</div>;
     }
 
     const {
@@ -250,23 +235,9 @@ export function PostDetailPage({
         articleImage,
         authorImage,
         createdAt,
-        category,
     } = post;
 
     const isOwnPost = currentUserNickname === authorNickname;
-
-    // 인라인 수정 모드로 쓰고 싶다면 여기에서 EditPostForm을 렌더링
-    if (isEditing) {
-        return (
-            <EditPost
-                id={id}
-                title={title}
-                article={article}
-                articleImage={articleImage}
-                category={category}
-            />
-        );
-    }
 
     return (
         <div id={`post-container-${id}`} className="post-container">
@@ -274,7 +245,7 @@ export function PostDetailPage({
                 <div className="post-header-container">
                     <div className="post-header-top">
                         <h2>{title}</h2>
-                        <button id="post-back-btn" onClick={handleBackToClick}>
+                        <button id="post-back-btn" onClick={handleBackToList}>
                             목록으로
                         </button>
                     </div>
@@ -289,10 +260,7 @@ export function PostDetailPage({
                                         alt="작성자 프로필"
                                     />
                                 ) : (
-                                    <img
-                                        id="post-author-profile-image"
-                                        alt="기본 프로필"
-                                    />
+                                    <img id="post-author-profile-image" alt="기본 프로필" />
                                 )}
                             </div>
                             <label className="post-author-nickname-field">
@@ -364,6 +332,7 @@ export function PostDetailPage({
                     </div>
                 </div>
             </div>
+
             <CommentCardList
                 postId={id}
                 onCreate={handleIncreaseCommentCount}
