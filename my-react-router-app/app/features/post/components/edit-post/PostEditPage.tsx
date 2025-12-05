@@ -24,7 +24,7 @@ export function PostEditPage() {
     const [title, setTitle] = useState("");
     const [article, setArticle] = useState("");
     const [oldImageName, setOldImageName] = useState<string | null>(null);
-    const [newFile, setNewFile] = useState<File | null>(null);
+    const [newFile, setNewFile] = useState<File | null>();
     const [helperText, setHelperText] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -84,15 +84,14 @@ export function PostEditPage() {
         setError(null);
 
         try {
-            const fileToSend = newFile ?? new Blob(); // 기존 로직과 비슷하게
-            const emptyFile = new File([], "", { type: "application/octet-stream" });
+            const fileToSend: File = newFile ?? new File([], "", { type: "application/octet-stream" });
 
             await requestEditPost(
                 post.id,
                 trimmedTitle,
                 trimmedArticle,
                 oldImageName ?? "",
-                newFile,
+                fileToSend,
                 post.category
             );
 
