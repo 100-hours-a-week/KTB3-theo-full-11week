@@ -2,21 +2,20 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { apiPath } from "../../lib/path/apiPath";
 import "../../styles/common-header/common-header.css"
+import { useLogout } from "../../hooks/logout/useLogout";
+import { useModal } from "../../hooks/modal/useModal";
+import { useUserContext } from "../../lib/context/UserContext";
 
 export function CommonHeader() {
+    const { logoutWithModal } = useLogout();
+    const { showModal } = useModal();
     const navigate = useNavigate();
+    const { user } = useUserContext();
     const containerRef = useRef<HTMLDivElement | null>(null);
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [profileImage, setProfileImage] = useState<string | null>(() => {
-        if (typeof window === "undefined") {
-            return null;
-        }
-        return localStorage.getItem('profileImage');
-    });
-
-    const profileImageUrl = profileImage != null
-        ? apiPath.PROFILE_IMAGE_STORATE_URL + profileImage : '';
+    const profileImageSrc = user?.profileImage ?
+        apiPath.PROFILE_IMAGE_STORATE_URL + user.profileImage : '';
 
     // 바깥 클릭 시 메뉴 닫기
     useEffect(() => {
@@ -60,8 +59,14 @@ export function CommonHeader() {
                 navigate("/editpassword");
                 break;
             case "logout":
-
-                // 모달로직 추가
+                showModal({
+                    title: "로그아웃 하시겠습니까?",
+                    detail: "로그아웃 후에는 다시 로그인해야 서비스 이용이 가능합니다.",
+                    onCancel: () => { },
+                    onConfirm: async () => {
+                        await logoutWithModal();
+                    }
+                })
                 break;
             default:
                 break;
@@ -92,10 +97,10 @@ export function CommonHeader() {
                             type="button"
                             onClick={handleProfileClick}
                         >
-                            {profileImage ? (
+                            {profileImageSrc ? (
                                 <img
                                     id="common-header-userprofile"
-                                    src={profileImageUrl}
+                                    src={profileImageSrc}
                                     alt="사용자 프로필"
                                 />
                             ) : (

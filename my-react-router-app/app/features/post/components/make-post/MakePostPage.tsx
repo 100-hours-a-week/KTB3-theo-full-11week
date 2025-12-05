@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { requestMakePost } from "~/features/shared/lib/api/post-api";
 import { toastService } from "~/features/shared/components/toast/toastService";
 import { ApiError } from "~/features/shared/lib/api/apiError";
+import { LOCAL_STORAGE_KEY } from "~/features/shared/lib/util/localstorage";
 
 type MakePostFormValue = {
     title: string;
@@ -50,7 +51,7 @@ export function MakePostPage() {
         try {
             setError("");
 
-            const authorId = Number(localStorage.getItem('currentUserId'));
+            const authorId = Number(localStorage.getItem(LOCAL_STORAGE_KEY.CURRENT_USER_ID));
             if (!authorId) {
                 setError("로그인이 필요합니다.");
                 return;

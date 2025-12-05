@@ -25,7 +25,7 @@ export function ErrorPage({
     onSecondary,
     extra,
 }: ErrorPageProps) {
-    console.log("test");
+
     useEffect(() => {
         if (typeof document === "undefined") return;
         const prev = document.body.style.overflow;

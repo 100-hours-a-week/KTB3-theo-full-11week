@@ -1,10 +1,17 @@
 import { useNavigate } from "react-router";
 import { ErrorPage } from "../../components/error/ErrorPage";
+import { accessTokenStore } from "../../lib/jwt/access-token";
 
 export function useErrorPage() {
     const navigate = useNavigate();
 
     const NotFoundPage = () => {
+        let primaryRedirect = "/postlist";
+        let secondaryRedirect = "/postlist";
+
+        if (!accessTokenStore.hasAccessToken()) {
+            primaryRedirect = secondaryRedirect = "/login";
+        }
         return <ErrorPage
             code={404}
             title="페이지를 찾을 수 없습니다."
@@ -12,8 +19,8 @@ export function useErrorPage() {
             hint="주소를 다시 확인하시거나, 오늘의 시세와 이야기가 있는 페이지로 돌아가 주세요."
             primaryLabel="오늘의 수산 홈으로"
             secondaryLabel="시세·이야기 보러가기"
-            onPrimary={() => navigate("/login")}
-            onSecondary={() => navigate("/postlist")}
+            onPrimary={() => navigate(primaryRedirect)}
+            onSecondary={() => navigate(secondaryRedirect)}
         />
     }
 

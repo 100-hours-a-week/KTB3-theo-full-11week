@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { isBetweenLength, isEmail, isValidPasswordPattern, isBlank } from "../../../shared/lib/util/util";
@@ -6,6 +6,9 @@ import { ApiError } from "../../../shared/lib/api/apiError";
 import "../../styles/login/login.css"
 import { requestLogin } from "~/features/shared/lib/api/user-api";
 import { IntroAnimation } from "~/features/shared/components/intro/IntroAnimation";
+import { LOCAL_STORAGE_KEY } from "~/features/shared/lib/util/localstorage";
+import { useUserContext } from "~/features/shared/lib/context/UserContext";
+import { useLogout } from "~/features/shared/hooks/logout/useLogout";
 
 type LoginFormValues = {
     email: string,
@@ -14,8 +17,18 @@ type LoginFormValues = {
 
 export function LoginPage() {
     const navigate = useNavigate();
+    const { user, setUser } = useUserContext();
+    const { logoutWithoutModal } = useLogout();
     const [error, setError] = useState("");
     const [showIntro, setShowIntro] = useState(true);
+
+    useEffect(() => {
+        if (!user) {
+            return;
+        }
+        logoutWithoutModal();
+    }, [])
+
 
     const { register, handleSubmit,
         formState: { errors, isValid, isSubmitting },
@@ -36,12 +49,21 @@ export function LoginPage() {
             const { email, password } = getValues();
             const response = await requestLogin(email, password);
             const responseBody = response.data;
+            const { id, nickname, profileImage, likedPostId } = responseBody;
             const isLoginSuccess = responseBody.loginSuccess;
             if (isLoginSuccess) {
-                localStorage.setItem('currentUserId', responseBody.id);
-                localStorage.setItem('nickname', responseBody.nickname);
-                localStorage.setItem('profileImage', responseBody.profileImage);
-                localStorage.setItem('likedPostId', responseBody.likedPostids);
+
+                localStorage.setItem(LOCAL_STORAGE_KEY.CURRENT_USER_ID, id);
+                localStorage.setItem(LOCAL_STORAGE_KEY.NICKNAME, nickname);
+                localStorage.setItem(LOCAL_STORAGE_KEY.PROFILE_IMAGE, profileImage);
+                localStorage.setItem(LOCAL_STORAGE_KEY.LIKED_POST_ID, likedPostId);
+
+                setUser({
+                    id: id,
+                    nickname: nickname,
+                    profileImage: profileImage,
+                    likedPostId: likedPostId,
+                });
 
                 navigate('/postlist');
             } else {
