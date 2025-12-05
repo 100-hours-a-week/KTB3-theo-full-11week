@@ -26,6 +26,8 @@ export function PostCardListPage() {
 
     const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
     const sentinelRef = useRef<HTMLDivElement>(null);
+    const isLoadingRef = useRef(false);
+    const hasNextRef = useRef(true);
 
     useEffect(() => {
         if (!hasNext) {
@@ -58,13 +60,22 @@ export function PostCardListPage() {
 
 
     useEffect(() => {
+        isLoadingRef.current = isLoading;
+    }, [isLoading])
+
+    useEffect(() => {
+        hasNextRef.current = hasNext;
+    }, [hasNext])
+
+
+    useEffect(() => {
         const sentinel = sentinelRef.current;
         if (!sentinel) return;
 
         const observer = new IntersectionObserver(
             (entries) => {
                 const entry = entries[0];
-                if (entry.isIntersecting && !isLoading && hasNext) {
+                if (entry.isIntersecting && !isLoadingRef.current && hasNextRef.current) {
                     setPage((prev) => prev + 1);
                 }
             },
@@ -74,7 +85,7 @@ export function PostCardListPage() {
         observer.observe(sentinel);
 
         return () => observer.disconnect();
-    }, [hasNext])
+    }, [])
 
     const handleCardClick = useCallback((postId: number) => {
         setSelectedPostId(postId);
