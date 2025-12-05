@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { isBetweenLength, isEmail, isValidPasswordPattern, isBlank } from "../../../shared/lib/util/util";
@@ -8,6 +8,7 @@ import { requestLogin } from "~/features/shared/lib/api/user-api";
 import { IntroAnimation } from "~/features/shared/components/intro/IntroAnimation";
 import { LOCAL_STORAGE_KEY } from "~/features/shared/lib/util/localstorage";
 import { useUserContext } from "~/features/shared/lib/context/UserContext";
+import { useLogout } from "~/features/shared/hooks/logout/useLogout";
 
 type LoginFormValues = {
     email: string,
@@ -17,8 +18,13 @@ type LoginFormValues = {
 export function LoginPage() {
     const navigate = useNavigate();
     const { setUser } = useUserContext();
+    const logout = useLogout();
     const [error, setError] = useState("");
     const [showIntro, setShowIntro] = useState(true);
+
+    useEffect(() => {
+        logout();
+    }, []);
 
     const { register, handleSubmit,
         formState: { errors, isValid, isSubmitting },
