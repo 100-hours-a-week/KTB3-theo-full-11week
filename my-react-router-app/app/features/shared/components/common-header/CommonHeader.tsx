@@ -4,24 +4,18 @@ import { apiPath } from "../../lib/path/apiPath";
 import "../../styles/common-header/common-header.css"
 import { useLogout } from "../../hooks/logout/useLogout";
 import { useModal } from "../../hooks/modal/useModal";
-import { LOCAL_STORAGE_KEY } from "../../lib/util/localstorage";
+import { useUserContext } from "../../lib/context/UserContext";
 
 export function CommonHeader() {
     const logout = useLogout();
     const { showModal } = useModal();
     const navigate = useNavigate();
+    const { user } = useUserContext();
     const containerRef = useRef<HTMLDivElement | null>(null);
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [profileImage, setProfileImage] = useState<string | null>(() => {
-        if (typeof window === "undefined") {
-            return null;
-        }
-        return localStorage.getItem(LOCAL_STORAGE_KEY.PROFILE_IMAGE);
-    });
-
-    const profileImageUrl = profileImage != null
-        ? apiPath.PROFILE_IMAGE_STORATE_URL + profileImage : '';
+    const profileImageSrc = user?.profileImage ?
+        apiPath.PROFILE_IMAGE_STORATE_URL + user.profileImage : '';
 
     // 바깥 클릭 시 메뉴 닫기
     useEffect(() => {
@@ -103,10 +97,10 @@ export function CommonHeader() {
                             type="button"
                             onClick={handleProfileClick}
                         >
-                            {profileImage ? (
+                            {profileImageSrc ? (
                                 <img
                                     id="common-header-userprofile"
-                                    src={profileImageUrl}
+                                    src={profileImageSrc}
                                     alt="사용자 프로필"
                                 />
                             ) : (
