@@ -2,12 +2,16 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { apiPath } from "../../lib/path/apiPath";
 import "../../styles/common-header/common-header.css"
+import { useLogout } from "../../hooks/logout/useLogout";
+import { Modal } from "../modal/Modal";
 
 export function CommonHeader() {
+    const logout = useLogout();
     const navigate = useNavigate();
     const containerRef = useRef<HTMLDivElement | null>(null);
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
     const [profileImage, setProfileImage] = useState<string | null>(() => {
         if (typeof window === "undefined") {
             return null;
@@ -60,8 +64,8 @@ export function CommonHeader() {
                 navigate("/editpassword");
                 break;
             case "logout":
-
                 // 모달로직 추가
+                setIsLogoutModalOpen(true);
                 break;
             default:
                 break;
@@ -128,6 +132,19 @@ export function CommonHeader() {
                     </div>
                 </div>
             </div>
+            {isLogoutModalOpen && (
+                <Modal
+                    title="로그아웃 하시겠습니까?"
+                    detail="로그아웃 후에는 다시 로그인해야 서비스 이용이 가능합니다."
+                    onCancel={() => setIsLogoutModalOpen(false)}
+                    onConfirm={async () => {
+                        setIsLogoutModalOpen(false);
+                        await logout();
+                    }}
+                >
+                </Modal>
+            )}
+
         </div>
     );
 }

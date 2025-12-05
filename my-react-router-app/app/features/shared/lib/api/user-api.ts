@@ -16,10 +16,11 @@ export async function requestLogin(email: string, password: string) {
 
 }
 export async function requestLogout() {
-    await new Api()
+    const response = await new Api()
         .post()
         .url(apiPath.LOGOUT_API_URL)
         .request();
+    return response;
 }
 
 // 이메일 중복 검사 요청 API

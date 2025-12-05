@@ -9,5 +9,5 @@ export default [
     route("post/:postId/edit", "routes/postEdit.tsx"),
     route("makepost", "routes/makepost.tsx"),
     route("notfound", "routes/not-found.tsx"),
-    route("*", "routes/not-found.tsx")
+    route("*", "routes/access-block.tsx")
 ];
