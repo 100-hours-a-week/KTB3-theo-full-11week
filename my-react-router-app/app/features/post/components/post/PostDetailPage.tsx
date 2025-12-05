@@ -90,8 +90,10 @@ export function PostDetailPage() {
                 } else {
                     setError("게시글을 불러오는 중 오류가 발생했습니다.");
                 }
+                navigate('/notfound')
             } finally {
                 if (isMounted) setIsLoading(false);
+
             }
         };
 
