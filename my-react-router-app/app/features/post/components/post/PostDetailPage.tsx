@@ -186,11 +186,7 @@ export function PostDetailPage() {
             await syncLikeChangeToServer();
         } finally {
             // 뒤로가기 없으면 /postlist로
-            if (window.history.length > 1) {
-                navigate(-1);
-            } else {
-                navigate("/postlist");
-            }
+            navigate('/postlist')
         }
     };
 
