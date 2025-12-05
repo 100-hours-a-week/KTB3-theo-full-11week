@@ -3,7 +3,7 @@ import "../../styles/post/comment-card-list.css"
 import { requestCreateComment, requestFindComments, requestUpdateComment } from "~/features/shared/lib/api/post-api";
 import { ApiError } from "~/features/shared/lib/api/apiError";
 import { getNowData, isBlank } from "~/features/shared/lib/util/util";
-import { O } from "node_modules/react-router/dist/development/router-CwNp5l9u.mjs";
+import { CommentCard } from "./CommentCard";
 
 type Comment = {
     id: number;
@@ -39,14 +39,14 @@ export function CommentCardList({ postId, onCreate, onDelete }: CommentCardListP
             return;
         }
 
-        let isMounted = false;
+        let isMounted = true;
 
         const loadPage = async () => {
             try {
                 setIsLoading(true);
                 setError(null);
 
-                const response = await requestFindComments(page, page, size);
+                const response = await requestFindComments(postId, page, size);
                 const { contents, hasNext: nextFlag } = response.data;
 
                 if (!isMounted) {
@@ -163,7 +163,7 @@ export function CommentCardList({ postId, onCreate, onDelete }: CommentCardListP
             if (error instanceof ApiError) {
                 setError(error.message);
             } else {
-                setError("댓굴을 수정하는 중 오류가 발생했습니다.")
+                setError("댓글을 수정하는 중 오류가 발생했습니다.")
             }
         }
     }, [canSubmit, content, editingCommentId, isEditMode, postId]);
@@ -176,9 +176,9 @@ export function CommentCardList({ postId, onCreate, onDelete }: CommentCardListP
         }
 
         if (!isEditMode) {
-            await handleUpdateCommentRequest();
-        } else {
             await handleCreateCommentRequest();
+        } else {
+            await handleUpdateCommentRequest();
         }
     }
 
@@ -240,8 +240,9 @@ export function CommentCardList({ postId, onCreate, onDelete }: CommentCardListP
                 {comments.map(comment => (
                     <CommentCard
                         key={comment.id}
+                        postId={postId}
                         comment={comment}
-                        onDelete={handleDeleteComment}
+                        onDeleted={handleDeleteComment}
                         onEditStart={handleStartEdit}
                     />
                 ))}
