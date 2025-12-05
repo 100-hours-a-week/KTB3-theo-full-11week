@@ -11,6 +11,7 @@ type LoginFormValues = {
     email: string,
     password: string
 }
+
 export function LoginPage() {
     const navigate = useNavigate();
     const [error, setError] = useState("");

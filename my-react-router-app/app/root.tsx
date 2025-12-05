@@ -9,14 +9,13 @@ import {
 } from "react-router";
 import { ToastProvider } from "./features/shared/components/toast/ToastProvider";
 import { NavigationProvider } from "./features/shared/lib/router/NavigationProvider";
+import { CommonHeader } from "./features/shared/components/common-header/CommonHeader";
 import "./root.css";
 
-// 🔹 문서 전체 레이아웃 (HTML 껍데기)
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
       <head>
-        {/* ★ 이거 하나로 인코딩 문제 거의 끝 */}
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>오늘의 수산</title>
@@ -37,6 +36,8 @@ export default function Root() {
   return (
     <ToastProvider>
       <NavigationProvider>
+        <CommonHeader>
+        </CommonHeader>
         <Outlet />
       </NavigationProvider>
     </ToastProvider>

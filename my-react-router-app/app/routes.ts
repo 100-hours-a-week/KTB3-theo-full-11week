@@ -6,4 +6,5 @@ export default [
     route("signup", "routes/signup.tsx"),
     route("postlist", "routes/postlist.tsx"),
     route("makepost", "routes/makepost.tsx"),
+    route("*", "routes/not-found.tsx")
 ];

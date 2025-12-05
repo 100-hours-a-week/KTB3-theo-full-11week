@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { requestPostCardList } from "~/features/shared/lib/api/post-api";
 import { PostListHeader } from "./PostListHeader";
 import { PostCard } from "./PostCard";
-import { PostDetail } from "../post/PostDetail";
+import { PostDetailPage } from "../post/PostDetailPage";
 import "../../styles/post-list/post-list.css"
 
 type PostSummary = {
@@ -16,7 +16,7 @@ type PostSummary = {
     authorNickname: string;
 };
 
-export function PostCardList() {
+export function PostCardListPage() {
     const [posts, setPosts] = useState<PostSummary[]>([]);
     const [page, setPage] = useState(0);
     const size = 10;
@@ -88,7 +88,7 @@ export function PostCardList() {
     return (
         <div className="post-card-list-container">
             {selectedPostId !== null ? (
-                <PostDetail
+                <PostDetailPage
                     postId={selectedPostId}
                     onBack={(summary) => {
                         setSelectedPostId(null);

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { ApiError } from "~/features/shared/lib/api/apiError";
 import { requestIncreasePostViewCount, requestPostDelete, requestPostDetail, requestPostLike, requestPostLikeCancel } from "~/features/shared/lib/api/post-api";
 import { apiPath } from "~/features/shared/lib/path/apiPath";
+import { EditPost } from "../edit-post/EditPostPage";
 import "../../styles/post/post-detail.css"
 
 const VIEW_COOLTIME_MS = 10_00 * 60;
@@ -38,7 +39,7 @@ type PostDetailProps = {
     onDelete: (postId: number) => void;
 };
 
-export function PostDetail({
+export function PostDetailPage({
     postId,
     onBack,
     onDelete
@@ -54,6 +55,7 @@ export function PostDetail({
     const [commentCount, setCommentCount] = useState(0);
 
     const [currentUserNickname, setCurrentUserNickname] = useState<string | null>(null);
+    const [isEditing, setIsEditing] = useState(false);
 
     useEffect(() => {
         let isMounted = true;
@@ -228,7 +230,7 @@ export function PostDetail({
     }
 
     const handleEditPost = () => {
-
+        setIsEditing(true);
     }
 
     if (isLoading) {
@@ -247,9 +249,23 @@ export function PostDetail({
         articleImage,
         authorImage,
         createdAt,
+        category,
     } = post;
 
     const isOwnPost = currentUserNickname === authorNickname;
+
+    // 인라인 수정 모드로 쓰고 싶다면 여기에서 EditPostForm을 렌더링
+    if (isEditing) {
+        return (
+            <EditPost
+                id={id}
+                title={title}
+                article={article}
+                articleImage={articleImage}
+                category={category}
+            />
+        );
+    }
 
     return (
         <div id={`post-container-${id}`} className="post-container">
@@ -325,8 +341,7 @@ export function PostDetail({
                     <div className="post-article-status">
                         <div
                             className={
-                                "post-article-like-box" +
-                                (isLikedPost ? " like" : "")
+                                "post-article-like-box" + (isLikedPost ? " like" : "")
                             }
                             onClick={handleToggleLike}
                         >
@@ -349,12 +364,14 @@ export function PostDetail({
                 </div>
             </div>
 
-            {/* 댓글 리스트 */}
-            {/* <CommentCardList
+            {/* 댓글 리스트 붙이고 싶으면 여기서 */}
+            {/* 
+      <CommentCardList
         postId={id}
         onCreate={handleIncreaseCommentCount}
         onDelete={handleDecreaseCommentCount}
-      /> */}
+      />
+      */}
         </div>
     );
 }

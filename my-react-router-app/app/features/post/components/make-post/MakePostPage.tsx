@@ -13,7 +13,7 @@ type MakePostFormValue = {
     articleImage: FileList;
 }
 
-export function MakePost() {
+export function MakePostPage() {
     const navigate = useNavigate();
     const [error, setError] = useState("");
 

@@ -1,5 +1,5 @@
-import { PostCardList } from "~/features/post/components/post-list/PostList";
+import { PostCardListPage } from "~/features/post/components/post-list/PostListPage";
 export default function PostListRoute() {
-    return <PostCardList></PostCardList>
+    return <PostCardListPage></PostCardListPage>
 
 }

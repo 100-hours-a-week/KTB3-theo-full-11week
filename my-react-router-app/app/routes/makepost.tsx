@@ -1,5 +1,5 @@
-import { MakePost } from "~/features/post/components/make-post/MakePost"
+import { MakePostPage } from "~/features/post/components/make-post/MakePostPage"
 
 export default function MakePostRoute() {
-    return <MakePost></MakePost>
+    return <MakePostPage></MakePostPage>
 }
