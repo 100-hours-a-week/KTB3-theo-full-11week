@@ -13,7 +13,8 @@ import { apiPath } from "~/features/shared/lib/path/apiPath";
 import { CommentCardList } from "./CommentCardList";
 import "../../styles/post/post-detail.css"
 import { Modal } from "~/features/shared/components/modal/Modal";
-import { toastService, useToast } from "~/features/shared/components/toast/useToast";
+import { useToast } from "~/features/shared/components/toast/useToast";
+import { toastService, type ToastOptions } from "~/features/shared/components/toast/toastService";
 
 const VIEW_COOLTIME_MS = 10_00 * 60;
 const VIEW_COOLTIME_KEY = "postViewCoolTime";
@@ -35,7 +36,7 @@ type PostDetailData = {
 export function PostDetailPage() {
     const { postId } = useParams();
     const navigate = useNavigate();
-    const toast = useToast();
+    const { showToast } = useToast();
 
     const numericPostId = Number(postId);
     const [post, setPost] = useState<PostDetailData | null>(null);
@@ -218,7 +219,7 @@ export function PostDetailPage() {
         try {
             await requestPostDelete(Number(postId));
             setIsDeleteModalOpen(false);
-            toast.showToast({
+            showToast({
                 title: "게시글 목록 화면으로 돌아갑니다",
                 buttonTitle: "닫기",
                 onClick() {
@@ -228,7 +229,7 @@ export function PostDetailPage() {
             })
         } catch (error) {
             if (error instanceof ApiError) {
-                toast.showToast({
+                showToast({
                     title: error.message,
                     buttonTitle: "게시글 목록 화면으로 이동",
                     onClick() {
