@@ -7,7 +7,7 @@ import { useModal } from "../../hooks/modal/useModal";
 import { useUserContext } from "../../lib/context/UserContext";
 
 export function CommonHeader() {
-    const logout = useLogout();
+    const { logoutWithModal } = useLogout();
     const { showModal } = useModal();
     const navigate = useNavigate();
     const { user } = useUserContext();
@@ -64,7 +64,7 @@ export function CommonHeader() {
                     detail: "로그아웃 후에는 다시 로그인해야 서비스 이용이 가능합니다.",
                     onCancel: () => { },
                     onConfirm: async () => {
-                        await logout();
+                        await logoutWithModal();
                     }
                 })
                 break;

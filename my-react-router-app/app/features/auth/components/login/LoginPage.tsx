@@ -17,14 +17,18 @@ type LoginFormValues = {
 
 export function LoginPage() {
     const navigate = useNavigate();
-    const { setUser } = useUserContext();
-    const logout = useLogout();
+    const { user, setUser } = useUserContext();
+    const { logoutWithoutModal } = useLogout();
     const [error, setError] = useState("");
     const [showIntro, setShowIntro] = useState(true);
 
     useEffect(() => {
-        logout();
-    }, []);
+        if (!user) {
+            return;
+        }
+        logoutWithoutModal();
+    }, [])
+
 
     const { register, handleSubmit,
         formState: { errors, isValid, isSubmitting },

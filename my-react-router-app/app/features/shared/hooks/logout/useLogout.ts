@@ -10,22 +10,38 @@ export function useLogout() {
     const { showToast } = useToast();
     const { setUser } = useUserContext();
 
-    return async function logout() {
-        try {
-            await requestLogout();
-        } catch (error) {
-
-        }
+    const claerLocalStorage = () => {
         localStorage.removeItem(LOCAL_STORAGE_KEY.NICKNAME);
         localStorage.removeItem(LOCAL_STORAGE_KEY.PROFILE_IMAGE);
         localStorage.removeItem(LOCAL_STORAGE_KEY.CURRENT_USER_ID);
         localStorage.removeItem(LOCAL_STORAGE_KEY.LIKED_POST_ID);
         localStorage.removeItem(LOCAL_STORAGE_KEY.POST_VIEW_COOL_TIME);
+    }
 
+    const claerAccessTokenStore = () => {
         accessTokenStore.clear();
+    }
 
+    const logoutWithoutModal = async () => {
+        try {
+            await requestLogout();
+        } catch (error) {
+        }
+        claerLocalStorage();
+        claerAccessTokenStore();
         setUser(null);
+        navigate('/login', { replace: true })
+    }
 
+    const logoutWithModal = async () => {
+        try {
+            await requestLogout();
+        } catch (error) {
+
+        }
+        claerLocalStorage();
+        claerAccessTokenStore();
+        setUser(null);
         showToast({
             title: "로그아웃 되었습니다",
             buttonTitle: "닫기",
@@ -34,5 +50,10 @@ export function useLogout() {
                 navigate('/login', { replace: true });
             }
         })
+    }
+
+    return {
+        logoutWithoutModal,
+        logoutWithModal,
     }
 }
