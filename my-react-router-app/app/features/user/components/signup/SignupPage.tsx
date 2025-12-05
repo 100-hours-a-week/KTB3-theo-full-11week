@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import '../styles/signup.css';
+import "../../styles/signup/signup.css"
 import { useEffect, useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { isBetweenLength, isEmail, isFile, isOverMaxLength, isValidPasswordPattern } from '~/features/shared/lib/util/util';
