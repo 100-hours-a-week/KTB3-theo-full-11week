@@ -1,5 +1,3 @@
-import { subscribe } from "diagnostics_channel";
-
 export type ModalOptions = {
     title: string;
     detail: string;

@@ -1,5 +1,5 @@
-import { modalService, type ModalOptions } from "./modalService"
-import { useModalContext } from "./ModalProvider"
+import { modalService, type ModalOptions } from "../../components/modal/modalService"
+import { useModalContext } from "../../components/modal/ModalProvider"
 
 export function useModal() {
     const { showModal, hideModal } = useModalContext();

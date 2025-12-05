@@ -1,4 +1,3 @@
-// app/features/shared/toast/useToast.ts
 import { toastService, type ToastOptions } from "../../components/toast/toastService"
 import { useToastContext } from "../../components/toast/ToastProvider"
 

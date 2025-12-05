@@ -8,6 +8,7 @@ import {
   ScrollRestoration,
 } from "react-router";
 import { ToastProvider } from "./features/shared/components/toast/ToastProvider";
+import { ModalProvider } from "./features/shared/components/modal/ModalProvider";
 import { NavigationProvider } from "./features/shared/lib/router/NavigationProvider";
 import { CommonHeader } from "./features/shared/components/common-header/CommonHeader";
 import "./root.css";
@@ -34,12 +35,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
 // 🔹 실제 앱 루트 (Provider + Outlet)
 export default function Root() {
   return (
-    <ToastProvider>
-      <NavigationProvider>
-        <CommonHeader>
-        </CommonHeader>
-        <Outlet />
-      </NavigationProvider>
-    </ToastProvider>
+    <ModalProvider>
+      <ToastProvider>
+        <NavigationProvider>
+          <CommonHeader>
+          </CommonHeader>
+          <Outlet />
+        </NavigationProvider>
+      </ToastProvider>
+    </ModalProvider>
   );
 }

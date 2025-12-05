@@ -3,10 +3,11 @@ import { useNavigate } from "react-router";
 import { apiPath } from "../../lib/path/apiPath";
 import "../../styles/common-header/common-header.css"
 import { useLogout } from "../../hooks/logout/useLogout";
-import { Modal } from "../modal/Modal";
+import { useModal } from "../../hooks/modal/useModal";
 
 export function CommonHeader() {
     const logout = useLogout();
+    const { showModal, hideModel } = useModal();
     const navigate = useNavigate();
     const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -64,8 +65,14 @@ export function CommonHeader() {
                 navigate("/editpassword");
                 break;
             case "logout":
-                // 모달로직 추가
-                setIsLogoutModalOpen(true);
+                showModal({
+                    title: "로그아웃 하시겠습니까?",
+                    detail: "로그아웃 후에는 다시 로그인해야 서비스 이용이 가능합니다.",
+                    onCancel: () => { },
+                    onConfirm: async () => {
+                        await logout();
+                    }
+                })
                 break;
             default:
                 break;
@@ -132,19 +139,6 @@ export function CommonHeader() {
                     </div>
                 </div>
             </div>
-            {isLogoutModalOpen && (
-                <Modal
-                    title="로그아웃 하시겠습니까?"
-                    detail="로그아웃 후에는 다시 로그인해야 서비스 이용이 가능합니다."
-                    onCancel={() => setIsLogoutModalOpen(false)}
-                    onConfirm={async () => {
-                        setIsLogoutModalOpen(false);
-                        await logout();
-                    }}
-                >
-                </Modal>
-            )}
-
         </div>
     );
 }
