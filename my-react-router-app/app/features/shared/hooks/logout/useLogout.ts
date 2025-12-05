@@ -10,7 +10,7 @@ export function useLogout() {
     const { showToast } = useToast();
     const { setUser } = useUserContext();
 
-    const claerLocalStorage = () => {
+    const clearLocalStorage = () => {
         localStorage.removeItem(LOCAL_STORAGE_KEY.NICKNAME);
         localStorage.removeItem(LOCAL_STORAGE_KEY.PROFILE_IMAGE);
         localStorage.removeItem(LOCAL_STORAGE_KEY.CURRENT_USER_ID);
@@ -27,7 +27,7 @@ export function useLogout() {
             await requestLogout();
         } catch (error) {
         }
-        claerLocalStorage();
+        clearLocalStorage();
         claerAccessTokenStore();
         setUser(null);
         navigate('/login', { replace: true })
@@ -39,7 +39,7 @@ export function useLogout() {
         } catch (error) {
 
         }
-        claerLocalStorage();
+        clearLocalStorage();
         claerAccessTokenStore();
         setUser(null);
         showToast({
