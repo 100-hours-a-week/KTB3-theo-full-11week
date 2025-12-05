@@ -1,4 +1,3 @@
-// app/features/post/components/post/CommentCard.tsx
 import { apiPath } from "~/features/shared/lib/path/apiPath";
 import { ApiError } from "~/features/shared/lib/api/apiError";
 import { requestCommentDelete } from "~/features/shared/lib/api/post-api";
@@ -6,6 +5,7 @@ import { Modal } from "~/features/shared/components/modal/Modal";
 import { useState } from "react";
 import { toastService } from "~/features/shared/components/toast/toastService";
 import { useToast } from "~/features/shared/components/toast/useToast";
+import "../../styles/post/comment-card.css"
 
 type CommentData = {
     id: number;
