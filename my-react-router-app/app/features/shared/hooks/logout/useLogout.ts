@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { requestLogout } from "~/features/shared/lib/api/user-api";
 import { accessTokenStore } from "~/features/shared/lib/jwt/access-token";
-import { toastService, useToast } from "../../components/toast/useToast";
+import { toastService, useToast } from "../toast/useToast";
 
 export function useLogout() {
     const navigate = useNavigate();

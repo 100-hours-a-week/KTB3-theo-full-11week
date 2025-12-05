@@ -1,6 +1,6 @@
 // app/features/shared/toast/useToast.ts
-import { toastService, type ToastOptions } from "./toastService"
-import { useToastContext } from "./ToastProvider"
+import { toastService, type ToastOptions } from "../../components/toast/toastService"
+import { useToastContext } from "../../components/toast/ToastProvider"
 
 /**
  * 리액트 컴포넌트 안에서 쓰는 용도

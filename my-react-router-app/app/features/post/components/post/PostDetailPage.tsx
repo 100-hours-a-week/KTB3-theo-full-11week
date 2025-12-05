@@ -13,7 +13,7 @@ import { apiPath } from "~/features/shared/lib/path/apiPath";
 import { CommentCardList } from "./CommentCardList";
 import "../../styles/post/post-detail.css"
 import { Modal } from "~/features/shared/components/modal/Modal";
-import { useToast } from "~/features/shared/components/toast/useToast";
+import { useToast } from "~/features/shared/hooks/toast/useToast";
 import { toastService, type ToastOptions } from "~/features/shared/components/toast/toastService";
 
 const VIEW_COOLTIME_MS = 10_00 * 60;

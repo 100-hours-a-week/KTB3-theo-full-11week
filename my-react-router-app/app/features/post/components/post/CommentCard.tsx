@@ -4,7 +4,7 @@ import { requestCommentDelete } from "~/features/shared/lib/api/post-api";
 import { Modal } from "~/features/shared/components/modal/Modal";
 import { useState } from "react";
 import { toastService } from "~/features/shared/components/toast/toastService";
-import { useToast } from "~/features/shared/components/toast/useToast";
+import { useToast } from "~/features/shared/hooks/toast/useToast";
 import "../../styles/post/comment-card.css"
 
 type CommentData = {
