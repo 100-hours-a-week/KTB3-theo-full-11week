@@ -7,6 +7,7 @@ import "../../styles/login/login.css"
 import { requestLogin } from "~/features/shared/lib/api/user-api";
 import { IntroAnimation } from "~/features/shared/components/intro/IntroAnimation";
 import { LOCAL_STORAGE_KEY } from "~/features/shared/lib/util/localstorage";
+import { useUserContext } from "~/features/shared/lib/context/UserContext";
 
 type LoginFormValues = {
     email: string,
@@ -15,6 +16,7 @@ type LoginFormValues = {
 
 export function LoginPage() {
     const navigate = useNavigate();
+    const { setUser } = useUserContext();
     const [error, setError] = useState("");
     const [showIntro, setShowIntro] = useState(true);
 
@@ -37,13 +39,21 @@ export function LoginPage() {
             const { email, password } = getValues();
             const response = await requestLogin(email, password);
             const responseBody = response.data;
+            const { id, nickname, profileImage, likedPostId } = responseBody;
             const isLoginSuccess = responseBody.loginSuccess;
             if (isLoginSuccess) {
 
-                localStorage.setItem(LOCAL_STORAGE_KEY.CURRENT_USER_ID, responseBody.id);
-                localStorage.setItem(LOCAL_STORAGE_KEY.NICKNAME, responseBody.nickname);
-                localStorage.setItem(LOCAL_STORAGE_KEY.PROFILE_IMAGE, responseBody.profileImage);
-                localStorage.setItem(LOCAL_STORAGE_KEY.LIKED_POST_ID, responseBody.likedPostId);
+                localStorage.setItem(LOCAL_STORAGE_KEY.CURRENT_USER_ID, id);
+                localStorage.setItem(LOCAL_STORAGE_KEY.NICKNAME, nickname);
+                localStorage.setItem(LOCAL_STORAGE_KEY.PROFILE_IMAGE, profileImage);
+                localStorage.setItem(LOCAL_STORAGE_KEY.LIKED_POST_ID, likedPostId);
+
+                setUser({
+                    id: id,
+                    nickname: nickname,
+                    profileImage: profileImage,
+                    likedPostId: likedPostId,
+                });
 
                 navigate('/postlist');
             } else {
