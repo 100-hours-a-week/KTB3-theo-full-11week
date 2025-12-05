@@ -14,10 +14,10 @@ import { CommentCardList } from "./CommentCardList";
 import "../../styles/post/post-detail.css"
 import { Modal } from "~/features/shared/components/modal/Modal";
 import { useToast } from "~/features/shared/hooks/toast/useToast";
-import { toastService, type ToastOptions } from "~/features/shared/components/toast/toastService";
+import { toastService } from "~/features/shared/components/toast/toastService";
+import { LOCAL_STORAGE_KEY } from "~/features/shared/lib/util/localstorage";
 
 const VIEW_COOLTIME_MS = 10_00 * 60;
-const VIEW_COOLTIME_KEY = "postViewCoolTime";
 
 type PostDetailData = {
     id: number;
@@ -75,11 +75,11 @@ export function PostDetailPage() {
                 setViewCount(detail.hit);
                 setCommentCount(detail.commentCount);
 
-                const nickname = localStorage.getItem("nickname");
+                const nickname = localStorage.getItem(LOCAL_STORAGE_KEY.NICKNAME);
                 setCurrentUserNickname(nickname);
 
                 const likedPostIds =
-                    localStorage.getItem("likedPostId")?.split(",") ?? [];
+                    localStorage.getItem(LOCAL_STORAGE_KEY.LIKED_POST_ID)?.split(",") ?? [];
                 const liked = likedPostIds.includes(String(numericPostId));
 
                 setIsLikedPost(liked);
@@ -113,7 +113,7 @@ export function PostDetailPage() {
 
         const getViewCoolTimeMapFromStorage = () => {
             try {
-                const raw = localStorage.getItem(VIEW_COOLTIME_KEY);
+                const raw = localStorage.getItem(LOCAL_STORAGE_KEY.POST_VIEW_COOL_TIME);
                 if (!raw) return {};
                 const parsed = JSON.parse(raw);
                 return typeof parsed === "object" && parsed !== null ? parsed : {};
@@ -124,7 +124,7 @@ export function PostDetailPage() {
 
         const saveViewCoolTimeMapToStorage = (map: Record<string, number>) => {
             try {
-                localStorage.setItem(VIEW_COOLTIME_KEY, JSON.stringify(map));
+                localStorage.setItem(LOCAL_STORAGE_KEY.POST_VIEW_COOL_TIME, JSON.stringify(map));
             } catch { }
         };
 
@@ -160,26 +160,26 @@ export function PostDetailPage() {
 
     // 좋아요 서버 동기화
     const syncLikeChangeToServer = useCallback(async () => {
-        const userId = Number(localStorage.getItem("currentUserId"));
+        const userId = Number(localStorage.getItem(LOCAL_STORAGE_KEY.CURRENT_USER_ID));
         if (!userId || !numericPostId) return;
 
         const postIdStr = String(numericPostId);
         const likedPostIds =
-            localStorage.getItem("likedPostId")?.split(",").filter(Boolean) ?? [];
+            localStorage.getItem(LOCAL_STORAGE_KEY.LIKED_POST_ID)?.split(",").filter(Boolean) ?? [];
 
         if (!wasLikedInitially && isLikedPost) {
             await requestPostLike(numericPostId, userId);
             if (!likedPostIds.includes(postIdStr)) {
                 likedPostIds.push(postIdStr);
             }
-            localStorage.setItem("likedPostId", likedPostIds.join(","));
+            localStorage.setItem(LOCAL_STORAGE_KEY.LIKED_POST_ID, likedPostIds.join(","));
             return;
         }
 
         if (wasLikedInitially && !isLikedPost) {
             await requestPostLikeCancel(numericPostId, userId);
             const filtered = likedPostIds.filter((id) => id !== postIdStr);
-            localStorage.setItem("likedPostId", filtered.join(","));
+            localStorage.setItem(LOCAL_STORAGE_KEY.LIKED_POST_ID, filtered.join(","));
         }
     }, [numericPostId, isLikedPost, wasLikedInitially]);
 

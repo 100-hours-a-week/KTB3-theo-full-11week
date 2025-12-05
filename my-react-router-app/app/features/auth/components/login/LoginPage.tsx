@@ -6,6 +6,7 @@ import { ApiError } from "../../../shared/lib/api/apiError";
 import "../../styles/login/login.css"
 import { requestLogin } from "~/features/shared/lib/api/user-api";
 import { IntroAnimation } from "~/features/shared/components/intro/IntroAnimation";
+import { LOCAL_STORAGE_KEY } from "~/features/shared/lib/util/localstorage";
 
 type LoginFormValues = {
     email: string,
@@ -38,10 +39,11 @@ export function LoginPage() {
             const responseBody = response.data;
             const isLoginSuccess = responseBody.loginSuccess;
             if (isLoginSuccess) {
-                localStorage.setItem('currentUserId', responseBody.id);
-                localStorage.setItem('nickname', responseBody.nickname);
-                localStorage.setItem('profileImage', responseBody.profileImage);
-                localStorage.setItem('likedPostId', responseBody.likedPostids);
+
+                localStorage.setItem(LOCAL_STORAGE_KEY.CURRENT_USER_ID, responseBody.id);
+                localStorage.setItem(LOCAL_STORAGE_KEY.NICKNAME, responseBody.nickname);
+                localStorage.setItem(LOCAL_STORAGE_KEY.PROFILE_IMAGE, responseBody.profileImage);
+                localStorage.setItem(LOCAL_STORAGE_KEY.LIKED_POST_ID, responseBody.likedPostId);
 
                 navigate('/postlist');
             } else {

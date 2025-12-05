@@ -4,20 +4,20 @@ import { apiPath } from "../../lib/path/apiPath";
 import "../../styles/common-header/common-header.css"
 import { useLogout } from "../../hooks/logout/useLogout";
 import { useModal } from "../../hooks/modal/useModal";
+import { LOCAL_STORAGE_KEY } from "../../lib/util/localstorage";
 
 export function CommonHeader() {
     const logout = useLogout();
-    const { showModal, hideModel } = useModal();
+    const { showModal } = useModal();
     const navigate = useNavigate();
     const containerRef = useRef<HTMLDivElement | null>(null);
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
     const [profileImage, setProfileImage] = useState<string | null>(() => {
         if (typeof window === "undefined") {
             return null;
         }
-        return localStorage.getItem('profileImage');
+        return localStorage.getItem(LOCAL_STORAGE_KEY.PROFILE_IMAGE);
     });
 
     const profileImageUrl = profileImage != null

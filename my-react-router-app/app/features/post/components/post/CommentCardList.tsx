@@ -4,6 +4,7 @@ import { requestCreateComment, requestFindComments, requestUpdateComment } from 
 import { ApiError } from "~/features/shared/lib/api/apiError";
 import { getNowData, isBlank } from "~/features/shared/lib/util/util";
 import { CommentCard } from "./CommentCard";
+import { LOCAL_STORAGE_KEY } from "~/features/shared/lib/util/localstorage";
 
 type Comment = {
     id: number;
@@ -109,7 +110,7 @@ export function CommentCardList({ postId, onCreate, onDelete }: CommentCardListP
         }
 
         try {
-            const userIdStr = localStorage.getItem('currentUserId');
+            const userIdStr = localStorage.getItem(LOCAL_STORAGE_KEY.CURRENT_USER_ID);
             const userId = userIdStr ? Number(userIdStr) : null;
             if (!userId) {
                 return;
@@ -122,8 +123,8 @@ export function CommentCardList({ postId, onCreate, onDelete }: CommentCardListP
             const newComment: Comment = {
                 id: responseBody.id,
                 authorId: userId,
-                authorNickname: localStorage.getItem("nickname") ?? '익명',
-                authorProfileImage: localStorage.getItem('profileImage') ?? null,
+                authorNickname: localStorage.getItem(LOCAL_STORAGE_KEY.NICKNAME) ?? '익명',
+                authorProfileImage: localStorage.getItem(LOCAL_STORAGE_KEY.PROFILE_IMAGE) ?? null,
                 updatedAt: getNowData(),
                 content: responseBody.content,
             };

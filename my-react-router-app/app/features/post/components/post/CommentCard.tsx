@@ -6,6 +6,7 @@ import { useState } from "react";
 import { toastService } from "~/features/shared/components/toast/toastService";
 import { useToast } from "~/features/shared/hooks/toast/useToast";
 import "../../styles/post/comment-card.css"
+import { LOCAL_STORAGE_KEY } from "~/features/shared/lib/util/localstorage";
 
 type CommentData = {
     id: number;
@@ -42,7 +43,7 @@ export function CommentCard({
 
     const currentUserNickname =
         typeof window !== "undefined"
-            ? localStorage.getItem("nickname")
+            ? localStorage.getItem(LOCAL_STORAGE_KEY.NICKNAME)
             : null;
 
     const isOwnComment = currentUserNickname === authorNickname;
