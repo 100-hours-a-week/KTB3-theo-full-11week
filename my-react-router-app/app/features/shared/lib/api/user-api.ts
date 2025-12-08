@@ -78,7 +78,7 @@ export async function requestCurrentUser(userId: number) {
 
 
 // 회원 프로필 수정 요청 API
-export async function requestProfileEdit(userId: number, oldFileName: string, profileImage: File, nickname: string) {
+export async function requestProfileEdit(userId: number, oldFileName: string | null, profileImage: File | null, nickname: string) {
 
     const response = await new Api()
         .patch()

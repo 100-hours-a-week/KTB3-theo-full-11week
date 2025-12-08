@@ -1,7 +1,7 @@
-import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
+import { createContext, useContext, useState, type Dispatch, type ReactNode, type SetStateAction } from "react";
 import { LOCAL_STORAGE_KEY } from "../util/localstorage";
 
-type User = {
+export type User = {
     id: number;
     nickname: string;
     profileImage: string | null;
@@ -10,7 +10,7 @@ type User = {
 
 type UserContextValue = {
     user: User | null;
-    setUser: (user: User | null) => void;
+    setUser: Dispatch<SetStateAction<User | null>>;
 }
 
 const UserContext = createContext<UserContextValue | undefined>(undefined);
