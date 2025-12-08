@@ -8,6 +8,7 @@ export default [
     route("post/:postId", "routes/postDetail.tsx"),
     route("post/:postId/edit", "routes/postEdit.tsx"),
     route("makepost", "routes/makepost.tsx"),
+    route("editPassword", "routes/editPassword.tsx"),
     route("notfound", "routes/not-found.tsx"),
     route("*", "routes/access-block.tsx")
 ];
