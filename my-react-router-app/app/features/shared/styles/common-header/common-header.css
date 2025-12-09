@@ -1,4 +1,3 @@
-/* ===== 공통 헤더 컨테이너 ===== */
 .common-header-container {
     position: sticky;
     top: 0;
@@ -10,7 +9,6 @@
     box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
 }
 
-/* 내부 레이아웃 */
 .common-header-wrapper {
     height: 100%;
     margin: 0 auto;
@@ -24,14 +22,12 @@
     box-sizing: border-box;
 }
 
-/* 왼쪽: 뒤로가기 버튼 영역 */
 .common-header-left {
     display: flex;
     align-items: center;
     justify-content: flex-start;
 }
 
-/* 중앙: 타이틀 */
 .common-header-center {
     display: flex;
     align-items: center;
@@ -45,14 +41,12 @@
     color: #1e3a5f;
 }
 
-/* 오른쪽: 프로필 영역 */
 .common-header-right {
     display: flex;
     align-items: center;
     justify-content: flex-end;
 }
 
-/* ===== 뒤로가기 버튼 ===== */
 #common-back-btn {
     width: 36px;
     height: 36px;
@@ -87,7 +81,6 @@
     box-shadow: none;
 }
 
-/* ===== 프로필 트리거 ===== */
 .profile-trigger {
     position: relative;
     display: inline-flex;
@@ -95,7 +88,6 @@
     justify-content: flex-end;
 }
 
-/* 프로필 버튼 자체 */
 #common-header-profile-btn {
     width: 40px;
     height: 40px;
@@ -130,7 +122,6 @@
     box-shadow: none;
 }
 
-/* 프로필 이미지 */
 #common-header-userprofile {
     width: 100%;
     height: 100%;
@@ -139,7 +130,6 @@
     border: none;
 }
 
-/* ===== 드롭다운 메뉴 ===== */
 
 .common-header-profile-menu[hidden],
 .common-header-profile-menu.hide {
@@ -164,7 +154,6 @@
     z-index: 1000;
 }
 
-/* 메뉴 버튼 공통 */
 .header-profile-menu-btn {
     width: 100%;
     text-align: left;
@@ -183,7 +172,6 @@
     transition: background-color 0.12s ease, color 0.12s ease;
 }
 
-/* 호버/포커스 시 파스텔 블루 하이라이트 */
 .header-profile-menu-btn:hover,
 .header-profile-menu-btn:focus {
     background-color: #eff6ff;

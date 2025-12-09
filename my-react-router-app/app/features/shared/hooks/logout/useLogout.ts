@@ -22,6 +22,17 @@ export function useLogout() {
         accessTokenStore.clear();
     }
 
+    const logoutWithNoRedirect = async () => {
+        try {
+            await requestLogout();
+        } catch (error) {
+
+        }
+        clearLocalStorage();
+        claerAccessTokenStore();
+        setUser(null);
+    }
+
     const logoutWithoutModal = async () => {
         try {
             await requestLogout();
@@ -55,5 +66,6 @@ export function useLogout() {
     return {
         logoutWithoutModal,
         logoutWithModal,
+        logoutWithNoRedirect,
     }
 }

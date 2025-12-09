@@ -1,4 +1,3 @@
-// app/features/shared/toast/toastService.ts
 export type ToastOptions = {
   title: string;
   buttonTitle: string;

@@ -10,7 +10,6 @@ type IntroAnimationProps = {
 
 export function IntroAnimation({ onFinish }: IntroAnimationProps) {
     const handleAnimationEnd = useCallback(() => {
-        // ocean-bg 제거 (기존 로직 유지)
         const oceanBg = document.querySelector('.ocean-bg');
         if (oceanBg) {
             oceanBg.remove();

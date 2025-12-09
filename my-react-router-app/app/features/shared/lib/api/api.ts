@@ -1,4 +1,3 @@
-// app/features/shared/lib/api/api.ts
 import { apiPath } from "../path/apiPath";
 import { ApiError } from "./apiError";
 import { accessTokenStore } from "../jwt/access-token";

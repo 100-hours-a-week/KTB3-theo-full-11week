@@ -124,7 +124,6 @@ export function MakePostPage() {
                         />
                     </div>
 
-                    {/* 내용 */}
                     <div className="make-post-field">
                         <label
                             className="make-post-label"
@@ -148,7 +147,6 @@ export function MakePostPage() {
                         <p id="make-post-form-helper-text">{helperText}</p>
                     </div>
 
-                    {/* 이미지 */}
                     <div className="make-post-field">
                         <label
                             className="make-post-label"
@@ -174,7 +172,6 @@ export function MakePostPage() {
                         </div>
                     </div>
 
-                    {/* 완료 버튼 */}
                     <button
                         id="make-post-btn"
                         type="submit"

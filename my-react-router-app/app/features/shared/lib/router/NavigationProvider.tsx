@@ -1,4 +1,3 @@
-// app/features/shared/lib/router/NavigationProvider.tsx
 import { useEffect, type ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { setNavigator } from "./navigationService";

@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import '../styles/signup.css';
+import "../../styles/signup/signup.css"
 import { useEffect, useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { isBetweenLength, isEmail, isFile, isOverMaxLength, isValidPasswordPattern } from '~/features/shared/lib/util/util';
@@ -45,17 +45,14 @@ export function SignupPage() {
     const watchNickname = watch('nickname');
     const watchProfileImage = watch('profileImage');
 
-    // 이메일이 바뀌면 중복체크 상태 초기화
     useEffect(() => {
         setIsAvailableEmail(false);
     }, [watchEmail])
 
-    // 닉네임이 바뀌면 중복체크 상태 초기화
     useEffect(() => {
         setIsAvailableNickname(false);
     }, [watchNickname])
 
-    // 프로필 이미지 미리보기 처리
     useEffect(() => {
         if (!watchProfileImage || watchProfileImage.length == 0) {
             if (profilePreviewUrl) {
@@ -77,7 +74,6 @@ export function SignupPage() {
 
     }, [watchProfileImage])
 
-    // 이메일 중복 검사
     const handleEmailDuplication = async () => {
         const email = watchEmail?.trim();
         if (!email || !isEmail(email)) return;
@@ -236,7 +232,6 @@ export function SignupPage() {
                                 }
                             })}
                             onBlur={() => {
-                                // 유효성 검사 통과한 경우에만 중복검사 요청
                                 if (!errors.email) {
                                     handleEmailDuplication();
                                 }

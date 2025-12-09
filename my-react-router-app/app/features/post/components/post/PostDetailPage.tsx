@@ -1,4 +1,3 @@
-// app/features/post/components/post/PostDetailPage.tsx
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ApiError } from "~/features/shared/lib/api/apiError";
@@ -54,7 +53,6 @@ export function PostDetailPage() {
     );
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-    // 상세 조회
     useEffect(() => {
         if (!numericPostId) return;
 
@@ -104,7 +102,6 @@ export function PostDetailPage() {
         };
     }, [numericPostId]);
 
-    // 조회수 증가 (쿨타임)
     useEffect(() => {
         if (!post || !numericPostId) return;
 
@@ -158,7 +155,6 @@ export function PostDetailPage() {
         increaseViewCount();
     }, [numericPostId, post]);
 
-    // 좋아요 서버 동기화
     const syncLikeChangeToServer = useCallback(async () => {
         const userId = Number(localStorage.getItem(LOCAL_STORAGE_KEY.CURRENT_USER_ID));
         if (!userId || !numericPostId) return;
@@ -192,7 +188,6 @@ export function PostDetailPage() {
         try {
             await syncLikeChangeToServer();
         } finally {
-            // 뒤로가기 없으면 /postlist로
             navigate('/postlist')
         }
     };

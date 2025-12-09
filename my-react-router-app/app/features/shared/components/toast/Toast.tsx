@@ -1,4 +1,3 @@
-// app/features/shared/toast/Toast.tsx
 import "../../styles/toast/toast.css"
 
 export type ToastProps = {
@@ -15,6 +14,7 @@ export function Toast({ title, buttonTitle, onClick }: ToastProps) {
                 <button
                     id="toast-btn"
                     type="button"
+                    autoFocus
                     onClick={onClick}
                 >
                     {buttonTitle}

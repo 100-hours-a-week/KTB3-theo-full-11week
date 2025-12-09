@@ -1,7 +1,6 @@
 import { Api } from "./api";
 import { apiPath } from "../path/apiPath";
 
-// 로그인 API 요청
 export async function requestLogin(email: string, password: string) {
     const response = await new Api()
         .post()
@@ -23,7 +22,6 @@ export async function requestLogout() {
     return response;
 }
 
-// 이메일 중복 검사 요청 API
 export async function requestEmailDuplication(email: string) {
     const response = await new Api()
         .post()
@@ -36,7 +34,6 @@ export async function requestEmailDuplication(email: string) {
     return response;
 }
 
-// 닉네임 중복 검사 요청 API
 export async function requestNicknameDuplication(nickname: string) {
     const response = await new Api()
         .post()
@@ -49,7 +46,6 @@ export async function requestNicknameDuplication(nickname: string) {
     return response;
 }
 
-// 회원가입 API 요청
 export async function requestSignup(email: string, password: string, nickname: string, profileImage: File) {
     const response = await new Api()
         .post()
@@ -66,7 +62,6 @@ export async function requestSignup(email: string, password: string, nickname: s
     return response;
 }
 
-// 현재 유저 정보 조회 요청 API
 export async function requestCurrentUser(userId: number) {
 
     const response = await new Api()
@@ -77,8 +72,7 @@ export async function requestCurrentUser(userId: number) {
 }
 
 
-// 회원 프로필 수정 요청 API
-export async function requestProfileEdit(userId: number, oldFileName: string, profileImage: File, nickname: string) {
+export async function requestProfileEdit(userId: number, oldFileName: string | null, profileImage: File | null, nickname: string) {
 
     const response = await new Api()
         .patch()
@@ -94,7 +88,6 @@ export async function requestProfileEdit(userId: number, oldFileName: string, pr
     return response;
 }
 
-// 회원 삭제 요청 API
 export async function requestDeleteUser(userId: number) {
     const response = await new Api()
         .delete()
@@ -104,7 +97,6 @@ export async function requestDeleteUser(userId: number) {
     return response;
 }
 
-// 비밀번호 수정 요청 API
 export async function requestEditPassword(userId: number, password: string) {
     const response = await new Api()
         .patch()

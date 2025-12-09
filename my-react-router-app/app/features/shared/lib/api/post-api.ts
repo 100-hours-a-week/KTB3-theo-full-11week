@@ -1,8 +1,6 @@
 import { Api } from "./api.js";
 import { apiPath } from "../path/apiPath";
 
-// 게시글 목록 조회 API 요청
-// start, default Page = 0
 export async function requestPostCardList(page: number, size: number) {
     const response = await new Api()
         .get()
@@ -13,7 +11,6 @@ export async function requestPostCardList(page: number, size: number) {
     return response;
 }
 
-// 게시글 삭제 요청 API
 export async function requestPostDelete(postId: number) {
     const response = await new Api()
         .delete()
@@ -23,7 +20,6 @@ export async function requestPostDelete(postId: number) {
     return response;
 }
 
-// post 좋아요 활성화 요청 API
 export async function requestPostLike(postId: number, userId: number) {
     const response = await new Api()
         .post()
@@ -33,7 +29,7 @@ export async function requestPostLike(postId: number, userId: number) {
 
     return response;
 }
-// post 좋아요 비활성화 요청 API
+
 export async function requestPostLikeCancel(postId: number, userId: number) {
     const response = await new Api()
         .post()
@@ -44,7 +40,6 @@ export async function requestPostLikeCancel(postId: number, userId: number) {
     return response;
 }
 
-// 현재 post 조회 요청 API
 export async function requestPostDetail(postId: number) {
     const response = await new Api()
         .get()
@@ -54,7 +49,6 @@ export async function requestPostDetail(postId: number) {
     return response;
 }
 
-// 댓글 삭제 API 요청
 export async function requestCommentDelete(postId: number, commentId: number) {
     const response = await new Api()
         .delete()
@@ -63,7 +57,6 @@ export async function requestCommentDelete(postId: number, commentId: number) {
     return response;
 }
 
-// 댓글 생성 API 요청
 export async function requestCreateComment(postId: number, userId: number, content: string) {
     const response = await new Api()
         .post()
@@ -78,8 +71,6 @@ export async function requestCreateComment(postId: number, userId: number, conte
     return response;
 }
 
-// 게시글 댓글 조회 API 요청
-// start, default Page = 0
 export async function requestFindComments(postId: number, page: number, size: number) {
     const response = await new Api()
         .get()
@@ -91,7 +82,6 @@ export async function requestFindComments(postId: number, page: number, size: nu
 }
 
 
-// 댓글 수정 API 요청
 export async function requestUpdateComment(postId: number, commentId: number, content: string) {
     const response = await new Api()
         .patch()
@@ -102,7 +92,6 @@ export async function requestUpdateComment(postId: number, commentId: number, co
     return response;
 }
 
-// 게시글 생성 요청
 export async function requestMakePost(authorId: number, title: string, article: string, articleImage: File, category: string) {
     let body = { authorId, title, article, articleImage, category }
 
@@ -116,7 +105,6 @@ export async function requestMakePost(authorId: number, title: string, article: 
     return response;
 }
 
-// 게시글 수정 요청 API
 export async function requestEditPost(postId: number, title: string, article: string, oldFileName: string, articleImage: File, category: string) {
     const response = await new Api()
         .patch()
@@ -135,7 +123,6 @@ export async function requestEditPost(postId: number, title: string, article: st
     return response;
 }
 
-// 게시글 조회 수 증가 요청
 export async function requestIncreasePostViewCount(postId: number) {
     const response = await new Api()
         .post()

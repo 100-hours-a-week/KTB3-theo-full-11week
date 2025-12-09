@@ -1,4 +1,3 @@
-/* 전체 오버레이 */
 .modal-container {
     position: fixed;
     inset: 0;
@@ -9,11 +8,10 @@
     align-items: center;
     justify-content: center;
 
-    background-color: rgba(15, 23, 42, 0.35); /* 살짝 어두운 티어 */
+    background-color: rgba(15, 23, 42, 0.35); 
     backdrop-filter: blur(2px);
 }
 
-/* 모달 카드 */
 .modal-wrapper {
     width: 100%;
     max-width: 360px;
@@ -30,7 +28,6 @@
     text-align: center;
 }
 
-/* 타이틀 */
 .modal-title {
     margin: 0 0 8px;
     font-size: 1.1rem;
@@ -38,7 +35,6 @@
     color: #111827;
 }
 
-/* 상세 문구 */
 .modal-detail {
     margin: 0 0 18px;
     font-size: 0.9rem;
@@ -46,7 +42,6 @@
     color: #4b5563;
 }
 
-/* 버튼 공통 */
 .modal-btn {
     display: inline-flex;
     align-items: center;
@@ -68,7 +63,6 @@
         transform 0.08s ease;
 }
 
-/* 취소 버튼: 연한 그레이 아웃라인 */
 #modal-cancel-btn {
     color: #4b5563;
     background-color: #f9fafb;
@@ -79,7 +73,6 @@
     background-color: #f3f4f6;
 }
 
-/* 확인 버튼: 파스텔 바다 그라데이션 */
 #modal-confirm-btn {
     color: #ffffff;
     background: linear-gradient(135deg, #4f9dff, #1a73e8);

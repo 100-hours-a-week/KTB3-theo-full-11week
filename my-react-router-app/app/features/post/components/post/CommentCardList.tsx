@@ -211,7 +211,6 @@ export function CommentCardList({ postId, onCreate, onDelete }: CommentCardListP
                             placeholder="댓글을 남겨주세요!"
                             value={content}
                             onChange={e => setContent(e.target.value)}
-                            onBlur={() => { /* 필요하면 여기서도 버튼 상태 갱신 */ }}
                         />
                         {!isEditMode ? (
                             <button
@@ -237,7 +236,6 @@ export function CommentCardList({ postId, onCreate, onDelete }: CommentCardListP
 
                 {error && <p className="comment-error-text">{error}</p>}
 
-                {/* 댓글 리스트 */}
                 {comments.map(comment => (
                     <CommentCard
                         key={comment.id}
