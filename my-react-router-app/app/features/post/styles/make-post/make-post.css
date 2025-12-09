@@ -1,4 +1,3 @@
-/* ===== 게시글 작성 전체 컨테이너 ===== */
 .make-post-container {
     display: flex;
     justify-content: center;
@@ -9,7 +8,6 @@
     box-sizing: border-box;
 }
 
-/* ===== 카드 래퍼 ===== */
 .make-post-wrapper {
     width: 100%;
     max-width: 720px;
@@ -25,7 +23,6 @@
     box-shadow: 0 18px 40px rgba(148, 163, 184, 0.25);
 }
 
-/* 제목 텍스트 */
 .make-post-wrapper > h2 {
     margin: 0 0 18px;
     text-align: center;
@@ -36,20 +33,17 @@
     color: #1e3a5f;
 }
 
-/* ===== 폼 ===== */
 #make-post-form {
     max-width: 100%;
     width: 100%;
     text-align: left;
 }
 
-/* 필드 공통 */
 .make-post-field {
     max-width: 100%;
     margin-bottom: 18px;
 }
 
-/* 라벨 공통 */
 .make-post-label {
     display: block;
     margin-bottom: 6px;
@@ -59,7 +53,6 @@
     color: #1f2937;
 }
 
-/* 입력/텍스트 영역 공통 */
 .make-post-input {
     display: block;
     width: 100%;
@@ -79,19 +72,16 @@
         box-shadow 0.15s ease;
 }
 
-/* 본문 textarea 높이 */
 #make-post-form-article {
     min-height: 320px;
 }
 
-/* 포커스 시 */
 .make-post-input:focus {
     background-color: #ffffff;
     border-color: #93c5fd;
     box-shadow: 0 0 0 1px #93c5fd33;
 }
 
-/* ===== 에러/헬퍼 텍스트 ===== */
 #make-post-form-helper-text {
     display: block;
     margin-top: 4px;
@@ -107,7 +97,6 @@
     font-size: 0.8rem;
 }
 
-/* ===== 파일 업로드 영역 ===== */
 .make-post-form-file-row {
     display: flex;
     align-items: center;
@@ -115,7 +104,6 @@
     gap: 8px;
 }
 
-/* 실제 input은 숨김 */
 #make-post-form-article-image {
     position: absolute;
     opacity: 0;
@@ -124,7 +112,6 @@
     pointer-events: none;
 }
 
-/* 파일 선택 버튼 스타일 */
 .make-post-file-btn {
     display: inline-flex;
     align-items: center;
@@ -145,7 +132,6 @@
         box-shadow 0.15s ease, transform 0.1s ease;
 }
 
-/* hover 시 */
 .make-post-file-btn:hover {
     background-color: #e0edff;
     border-color: #93c5fd;
@@ -157,13 +143,11 @@
     box-shadow: none;
 }
 
-/* 파일명 텍스트 */
 .make-post-file-text {
     font-size: 0.85rem;
     color: #6b7280;
 }
 
-/* ===== 작성 완료 버튼 ===== */
 #make-post-btn {
     display: block;
     width: 100%;
@@ -180,14 +164,13 @@
     letter-spacing: 0.04em;
 
     color: #ffffff;
-    background-color: #dbeafe; /* 비활성화 시 연한 파랑 */
+    background-color: #dbeafe; 
 
     cursor: default;
     transition: background 0.2s ease, transform 0.1s ease,
         box-shadow 0.2s ease;
 }
 
-/* 활성화 상태 */
 #make-post-btn.active {
     background: linear-gradient(135deg, #4f9dff, #1a73e8);
     box-shadow: 0 8px 18px rgba(37, 99, 235, 0.35);

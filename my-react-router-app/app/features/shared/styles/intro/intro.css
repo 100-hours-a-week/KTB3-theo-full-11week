@@ -1,4 +1,3 @@
-/* ===== Intro Splash (파스텔 바다 버전) ===== */
 .intro-overlay {
     position: fixed;
     inset: 0;
@@ -6,7 +5,6 @@
     justify-content: center;
     align-items: center;
 
-    /* 인트로 시에만 잠깐 보이는 파스텔 블루 배경 */
     background: radial-gradient(
         circle at 50% 0%,
         rgba(180, 210, 255, 0.95),
@@ -16,7 +14,6 @@
     backdrop-filter: blur(3px);
 }
 
-/* 로고 + 텍스트를 세로로 정렬 */
 .intro-content {
     display: flex;
     flex-direction: column;
@@ -48,7 +45,6 @@
     animation: introSoft 2s ease-out forwards;
 }
 
-/* ✅ 위에 덮는 그라데이션을 훨씬 옅게 (파도 가리지 않게) */
 .intro-circle::after {
     content: '';
     position: absolute;
@@ -68,7 +64,6 @@
     top: 50%;
     left: 50%;
 
-    /* 🔄 파도 다시 둥근 느낌으로 복구 */
     width: 320px;
     height: 320px;
 
@@ -79,7 +74,7 @@
     transform-origin: 50% 48%;
     animation: drift 6000ms linear infinite;
 
-    z-index: 1; /* 파도는 로고 뒤에 */
+    z-index: 1; 
 }
 
 .intro-wave.-two {
@@ -94,10 +89,8 @@
     background: #22c1f1;
 }
 
-/* 파도 회전 + 물 높이 */
 @keyframes drift {
     0% {
-        /* ⬇ 두 번째 값(30%)이 물 높이: 값이 커질수록 물이 더 아래로 내려감 */
         transform: translate(-50%, 20%) rotate(0deg);
     }
     100% {
@@ -108,22 +101,20 @@
 
 .intro-logo-group {
     position: relative;
-    z-index: 2; /* 파도, ::after보다 위 */
+    z-index: 2; 
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    transform: translateY(-40%);  /* ⬅ 그룹 전체를 위로 10px 올리기 */
+    transform: translateY(-40%);  
 }
 
-/* 로고 스타일 */
 .intro-logo {
     width: 96px;
     height: 96px;
     object-fit: contain;
 }
 
-/* '오늘의 물고기' 텍스트 */
 .intro-text {
     font-size: 1.9rem;
     font-weight: 800;

@@ -7,7 +7,6 @@
     align-items: center;
     justify-content: center;
 
-    /* 살짝만 어두운 배경 */
     background-color: rgba(15, 23, 42, 0.28);
     backdrop-filter: blur(2px);
 
@@ -15,7 +14,6 @@
     box-sizing: border-box;
 }
 
-/* 토스트 카드 */
 .toast-wrapper {
     background-color: #ffffff;
     border-radius: 20px;
@@ -32,7 +30,6 @@
     text-align: center;
 }
 
-/* 타이틀 텍스트 */
 .toast-title {
     margin: 0 0 12px;
     font-size: 1rem;
@@ -40,7 +37,6 @@
     color: #111827;
 }
 
-/* 확인 버튼 */
 #toast-btn {
     border: none;
     padding: 9px 16px;
@@ -55,7 +51,6 @@
     font-weight: 600;
     letter-spacing: 0.04em;
 
-    /* 기본 상태: 바다 그라데이션 버튼 */
     color: #ffffff;
     background: linear-gradient(135deg, #4f9dff, #1a73e8);
     box-shadow: 0 8px 18px rgba(37, 99, 235, 0.35);

@@ -53,7 +53,6 @@ export function PostCardListPage() {
         loadPage();
     }, [page, hasNext]);
 
-    // 무한 스크롤 옵저버
     useEffect(() => {
         const sentinel = sentinelRef.current;
         if (!sentinel) return;

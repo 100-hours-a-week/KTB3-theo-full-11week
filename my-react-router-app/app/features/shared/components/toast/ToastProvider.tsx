@@ -1,4 +1,3 @@
-// app/features/shared/toast/ToastProvider.tsx
 import { createContext, useState, useCallback, useEffect, useContext, type ReactNode } from "react";
 import { Toast } from "./Toast";
 import { toastService, type ToastOptions } from "./toastService";
@@ -21,7 +20,6 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         setToast(null);
     }, []);
 
-    // 전역 toastService 구독 (리액트 바깥에서 호출해도 토스트 뜨게)
     useEffect(() => {
         const unsubscribe = toastService.subscribe((options) => {
             if (!options) {

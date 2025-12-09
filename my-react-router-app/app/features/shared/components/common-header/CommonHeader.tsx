@@ -17,7 +17,6 @@ export function CommonHeader() {
     const profileImageSrc = user?.profileImage ?
         apiPath.PROFILE_IMAGE_STORATE_URL + user.profileImage : '';
 
-    // 바깥 클릭 시 메뉴 닫기
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (!containerRef.current) {
@@ -34,18 +33,15 @@ export function CommonHeader() {
         }
     }, []);
 
-    // 뒤로가기
     const handleBack = () => {
         navigate(-1);
     }
 
-    // 프로빌 버튼 클릭(메뉴 토글)
     const handleProfileClick = (event: React.MouseEvent) => {
         event.stopPropagation();
         setIsMenuOpen((prev) => !prev);
     }
 
-    // 메뉴 공통 액션 처리
     const handleMenuAction = (action: string) => {
         if (!action) {
             return;
@@ -77,19 +73,16 @@ export function CommonHeader() {
     return (
         <div className="common-header-container" ref={containerRef}>
             <div className="common-header-wrapper">
-                {/* 왼쪽: 뒤로가기 */}
                 <div className="common-header-left">
                     <button id="common-back-btn" onClick={handleBack}>
                         &lt;
                     </button>
                 </div>
 
-                {/* 가운데: 타이틀 */}
                 <div className="common-header-center">
                     바다의 가격을 가장 빠르게, 오늘의 수산
                 </div>
 
-                {/* 오른쪽: 프로필/메뉴 */}
                 <div className="common-header-right">
                     <div className="profile-trigger">
                         <button

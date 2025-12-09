@@ -28,12 +28,12 @@ export function EditProfilePage() {
     const { showToast } = useToast();
     const { showModal } = useModal();
 
-    // 이메일은 User 타입에 없으니까 로컬 state로만 관리
     const [email, setEmail] = useState("");
     const [oldImageName, setOldImageName] = useState<string | null>(null);
     const [newFile, setNewFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [isDuplicateNickname, setIsDuplicateNickname] = useState(false);
+    const [isNicknameChecked, setIsNicknameChecked] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
     const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -54,12 +54,6 @@ export function EditProfilePage() {
     const nicknameValue = watch("nickname");
 
     useEffect(() => {
-        // if (user) {
-        //     setOldImageName(user.profileImage ?? null);
-        //     reset({ nickname: user.nickname });
-        //     setIsLoading(false);
-        //     return;
-        // }
 
         const userId = Number(localStorage.getItem(LOCAL_STORAGE_KEY.CURRENT_USER_ID));
         if (!userId) {
@@ -146,16 +140,22 @@ export function EditProfilePage() {
 
     const handleNicknameBlur = async () => {
         const valid = await trigger("nickname");
-        if (!valid) return;
-
+        if (!valid) {
+            setIsNicknameChecked(false);
+            return;
+        }
         const nickname = nicknameValue?.trim() ?? "";
-        if (isBlank(nickname)) return;
-
+        if (isBlank(nickname)) {
+            setIsNicknameChecked(false);
+            return;
+        }
         try {
             const response = await requestNicknameDuplication(nickname);
             const { available } = response.data;
             setIsDuplicateNickname(!available);
+            setIsNicknameChecked(true);
         } catch (error) {
+            setIsNicknameChecked(false);
             if (error instanceof ApiError) {
                 showToast({
                     title: error.message ?? "닉네임 중복 검사에 실패했습니다.",
@@ -171,6 +171,7 @@ export function EditProfilePage() {
     useEffect(() => {
         if (!isDirty) return;
         setIsDuplicateNickname(false);
+        setIsNicknameChecked(false);
     }, [nicknameValue, isDirty]);
 
     const nicknameHelperText =
@@ -178,7 +179,7 @@ export function EditProfilePage() {
         (isDuplicateNickname ? "중복된 닉네임입니다." : "");
 
     const canSubmit =
-        !isLoading && isDirty && isValid && !isDuplicateNickname && !isSubmitting && !!nicknameValue?.trim();
+        !isLoading && isDirty && isValid && isNicknameChecked && !isDuplicateNickname && !isSubmitting && !!nicknameValue?.trim();
 
     const onSubmit = async (values: EditProfileFormValues) => {
         if (!user) return;

@@ -29,7 +29,6 @@ export function PostEditPage() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    // 초기 데이터 로드
     useEffect(() => {
         if (!numericPostId) return;
 
@@ -95,7 +94,6 @@ export function PostEditPage() {
                 post.category
             );
 
-            // 수정 완료 후 상세 페이지로 이동
             navigate(`/post/${post.id}`);
         } catch (error) {
             if (error instanceof ApiError) {

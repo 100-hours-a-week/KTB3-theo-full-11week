@@ -1,4 +1,3 @@
-// app/root.tsx
 import React from "react";
 import {
   Links,

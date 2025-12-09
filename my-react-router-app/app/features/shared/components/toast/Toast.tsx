@@ -1,4 +1,3 @@
-// app/features/shared/toast/Toast.tsx
 import "../../styles/toast/toast.css"
 
 export type ToastProps = {

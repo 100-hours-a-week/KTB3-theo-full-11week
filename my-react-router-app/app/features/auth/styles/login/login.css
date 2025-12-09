@@ -1,15 +1,13 @@
-/* 전체 로그인 영역: 화면 가운데 정렬 */
 .login-container {
     display: flex;
     justify-content: center;
     align-items: flex-start;
 
-    min-height: calc(100vh - 140px); /* header/footer 고려 여유값 */
+    min-height: calc(100vh - 140px); 
     padding:  72px 16px 40px;
     box-sizing: border-box;
 }
 
-/* 로그인 카드 */
 .login-wrapper {
     width: 100%;
     max-width: 420px;
@@ -20,7 +18,6 @@
     border-radius: 24px;
     background-color: #ffffff;
 
-    /* 파스텔 바다 느낌의 은은한 그림자 */
     box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
     border: 1px solid #e5e7eb;
 
@@ -28,7 +25,6 @@
     overflow: hidden;
 }
 
-/* 위쪽에 살짝 바다 그라데이션 라인 */
 .login-wrapper::before {
     content: "";
     position: absolute;
@@ -46,7 +42,6 @@
     z-index: -1;
 }
 
-/* 제목 영역 */
 .login-wrapper > h2 {
     margin: 0 0 4px;
     text-align: center;
@@ -56,7 +51,6 @@
     color: #1e3a5f;
 }
 
-/* 제목 아래 작은 캡션 (오늘의 수산) */
 .login-wrapper > h2::after {
     content: "오늘의 수산";
     display: block;
@@ -68,7 +62,6 @@
     color: #7b93b5;
 }
 
-/* 폼 전체 */
 #login-form {
     max-width: 100%;
     width: 100%;
@@ -76,13 +69,11 @@
     margin-bottom: 16px;
 }
 
-/* 각 필드 래퍼 */
 .login-field {
     max-width: 100%;
     margin-bottom: 16px;
 }
 
-/* 이메일/비밀번호 라벨 */
 .login-label {
     display: block;
     margin-bottom: 6px;
@@ -92,7 +83,6 @@
     color: #1f2937;
 }
 
-/* 입력창 공통 스타일 */
 .login-input {
     display: block;
     width: 100%;
@@ -112,14 +102,12 @@
         box-shadow 0.15s ease;
 }
 
-/* 포커스 시 파스텔 블루 강조 */
 .login-input:focus {
     background-color: #ffffff;
     border-color: #93c5fd;
     box-shadow: 0 0 0 1px #93c5fd33;
 }
 
-/* 로그인 버튼 */
 #login-btn {
     display: block;
     width: 100%;
@@ -135,27 +123,24 @@
     letter-spacing: 0.04em;
 
     color: white;
-    background: #dbeafe; /* 비활성화 시 아주 연한 파랑 */
+    background: #dbeafe; 
 
     cursor: default;
     transition: background 0.2s ease, transform 0.1s ease,
         box-shadow 0.2s ease;
 }
 
-/* 활성화 시: 메인 바다색 그라데이션 버튼 */
 #login-btn.active {
     background: linear-gradient(135deg, #4f9dff, #1a73e8);
     box-shadow: 0 8px 18px rgba(37, 99, 235, 0.35);
     cursor: pointer;
 }
 
-/* 클릭 시 살짝 눌리는 느낌 */
 #login-btn.active:active {
     transform: translateY(1px);
     box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
 }
 
-/* 헬퍼 텍스트 (에러 메시지) */
 #login-form-helper-text {
     display: block;
     text-align: left;
@@ -173,7 +158,6 @@
     font-size: 0.8rem;
 }
 
-/* 회원가입 링크 */
 #login-to-signup-link {
     display: block;
     margin-top: 12px;
@@ -185,7 +169,6 @@
     color: #2563eb;
 }
 
-/* 호버 시 살짝 진하게 */
 #login-to-signup-link:hover {
     text-decoration: underline;
     color: #1d4ed8;

@@ -1,4 +1,3 @@
-// app/features/shared/lib/router/navigationService.ts
 type NavigateArg = string | number;
 
 type NavigateFn = (to: NavigateArg) => void;

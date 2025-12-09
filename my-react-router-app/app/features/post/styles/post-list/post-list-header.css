@@ -3,7 +3,6 @@
     margin-bottom: 24px;
 }
 
-/* 상단 안내 배너 박스 */
 .post-card-title-box {
     width: 100%;
     max-width: 720px;
@@ -27,7 +26,6 @@
     box-shadow: 0 10px 30px rgba(148, 163, 184, 0.3);
 }
 
-/* 안내 문구 */
 .post-card-list-header p {
     margin: 0 0 14px;
 
@@ -44,7 +42,6 @@
     color: #1d4ed8;
 }
 
-/* 글쓰기 버튼 */
 .post-card-create-btn {
     align-self: flex-end;
 
