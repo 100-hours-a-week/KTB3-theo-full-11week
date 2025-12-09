@@ -1,9 +1,7 @@
 import { Api } from "./api.js";
-import { apiPath } from "../../path/apiPath.js";
+import { apiPath } from "../path/apiPath.js";
 
-// 게시글 목록 조회 API 요청
-// start, default Page = 0
-export async function requestPostCardList(page, size) {
+export async function requestPostCardList(page: number, size: number) {
     const response = await new Api()
         .get()
         .url(apiPath.POST_CARD_LIST_API_URL)
@@ -13,8 +11,7 @@ export async function requestPostCardList(page, size) {
     return response;
 }
 
-// 게시글 삭제 요청 API
-export async function requestPostDelete(postId) {
+export async function requestPostDelete(postId: number) {
     const response = await new Api()
         .delete()
         .url(apiPath.DELETE_POST_API_URL(postId))
@@ -23,8 +20,7 @@ export async function requestPostDelete(postId) {
     return response;
 }
 
-// post 좋아요 활성화 요청 API
-export async function requestPostLike(postId, userId) {
+export async function requestPostLike(postId: number, userId: number) {
     const response = await new Api()
         .post()
         .url(apiPath.POST_LIKE_API_URL(postId))
@@ -33,8 +29,8 @@ export async function requestPostLike(postId, userId) {
 
     return response;
 }
-// post 좋아요 비활성화 요청 API
-export async function requestPostLikeCancel(postId, userId) {
+
+export async function requestPostLikeCancel(postId: number, userId: number) {
     const response = await new Api()
         .post()
         .url(apiPath.POST_LIKE_CANCEL_API_URL(postId))
@@ -44,8 +40,7 @@ export async function requestPostLikeCancel(postId, userId) {
     return response;
 }
 
-// 현재 post 조회 요청 API
-export async function requestPostDetail(postId) {
+export async function requestPostDetail(postId: number) {
     const response = await new Api()
         .get()
         .url(apiPath.POST_DETAIL_API_URL(postId))
@@ -54,8 +49,7 @@ export async function requestPostDetail(postId) {
     return response;
 }
 
-// 댓글 삭제 API 요청
-export async function requestCommentDelete(postId, commentId) {
+export async function requestCommentDelete(postId: number, commentId: number) {
     const response = await new Api()
         .delete()
         .url(apiPath.DELETE_COMMENT_API_URL(postId, commentId))
@@ -63,8 +57,7 @@ export async function requestCommentDelete(postId, commentId) {
     return response;
 }
 
-// 댓글 생성 API 요청
-export async function requestCreateComment(postId, userId, content) {
+export async function requestCreateComment(postId: number, userId: number, content: string) {
     const response = await new Api()
         .post()
         .url(apiPath.CREATE_COMMENT_API_URL(postId))
@@ -78,9 +71,7 @@ export async function requestCreateComment(postId, userId, content) {
     return response;
 }
 
-// 게시글 댓글 조회 API 요청
-// start, default Page = 0
-export async function requestFindComments(postId, page, size) {
+export async function requestFindComments(postId: number, page: number, size: number) {
     const response = await new Api()
         .get()
         .url(apiPath.FIND_COMMENTS_API_URL(postId))
@@ -91,8 +82,7 @@ export async function requestFindComments(postId, page, size) {
 }
 
 
-// 댓글 수정 API 요청
-export async function requestUpdateComment(postId, commentId, content) {
+export async function requestUpdateComment(postId: number, commentId: number, content: string) {
     const response = await new Api()
         .patch()
         .url(apiPath.UPDATE_COMMENT_API_URL(postId, commentId))
@@ -102,8 +92,7 @@ export async function requestUpdateComment(postId, commentId, content) {
     return response;
 }
 
-// 게시글 생성 요청
-export async function requestMakePost(authorId, title, article, articleImage, category) {
+export async function requestMakePost(authorId: number, title: string, article: string, articleImage: File, category: string) {
     let body = { authorId, title, article, articleImage, category }
 
     const response = await new Api()
@@ -116,8 +105,7 @@ export async function requestMakePost(authorId, title, article, articleImage, ca
     return response;
 }
 
-// 게시글 수정 요청 API
-export async function requestEditPost(postId, title, article, oldFileName, articleImage, category) {
+export async function requestEditPost(postId: number, title: string, article: string, oldFileName: string, articleImage: File, category: string) {
     const response = await new Api()
         .patch()
         .url(apiPath.EDIT_POST_API_URL(postId))
@@ -135,8 +123,7 @@ export async function requestEditPost(postId, title, article, oldFileName, artic
     return response;
 }
 
-// 게시글 조회 수 증가 요청
-export async function requestIncreasePostViewCount(postId) {
+export async function requestIncreasePostViewCount(postId: number) {
     const response = await new Api()
         .post()
         .url(apiPath.INCREASE_POST_VIEW_COUNT_API_URL(postId))
