@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-
 import { ApiError } from "~/features/shared/lib/api/apiError";
 import {
     requestCurrentUser,
@@ -15,23 +14,16 @@ import { LOCAL_STORAGE_KEY } from "~/features/shared/lib/util/localstorage";
 import { isBlank, isFile, isOverMaxLength } from "~/features/shared/lib/util/util";
 import { useToast, toastService } from "~/features/shared/hooks/toast/useToast";
 import { useModal } from "~/features/shared/hooks/modal/useModal";
-
 import "../../styles/edit-profile/edit-profile.css";
+import { useLogout } from "~/features/shared/hooks/logout/useLogout";
 
 type EditProfileFormValues = {
     nickname: string;
 };
 
-type CurrentUserResponse = {
-    id: number;
-    email: string;
-    nickname: string;
-    profileImage: string | null;
-    likedPostId: string | null;
-};
-
 export function EditProfilePage() {
     const navigate = useNavigate();
+    const { logoutWithoutModal } = useLogout();
     const { user, setUser } = useUserContext();
     const { showToast } = useToast();
     const { showModal } = useModal();
@@ -44,6 +36,7 @@ export function EditProfilePage() {
     const [isDuplicateNickname, setIsDuplicateNickname] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
     const {
         register,
         handleSubmit,
@@ -61,13 +54,15 @@ export function EditProfilePage() {
     const nicknameValue = watch("nickname");
 
     useEffect(() => {
-        const userIdFromContext = user?.id;
-        const userIdFromStorage = Number(
-            localStorage.getItem(LOCAL_STORAGE_KEY.CURRENT_USER_ID)
-        );
-        const effectiveUserId = userIdFromStorage ?? userIdFromContext ?? null;
+        // if (user) {
+        //     setOldImageName(user.profileImage ?? null);
+        //     reset({ nickname: user.nickname });
+        //     setIsLoading(false);
+        //     return;
+        // }
 
-        if (!effectiveUserId) {
+        const userId = Number(localStorage.getItem(LOCAL_STORAGE_KEY.CURRENT_USER_ID));
+        if (!userId) {
             navigate("/login", { replace: true });
             return;
         }
@@ -76,10 +71,10 @@ export function EditProfilePage() {
 
         const load = async () => {
             try {
-                const response = await requestCurrentUser(effectiveUserId);
+                const response = await requestCurrentUser(userId);
                 if (!isMounted) return;
 
-                const data = response.data as CurrentUserResponse;
+                const data = response.data;
 
                 setEmail(data.email);
                 setOldImageName(data.profileImage ?? null);
@@ -107,13 +102,11 @@ export function EditProfilePage() {
                 }
             }
         };
-
         load();
-
         return () => {
             isMounted = false;
         };
-    }, [user, navigate, reset, setUser, showToast]);
+    }, [navigate, reset, setUser]);
 
     useEffect(() => {
         return () => {
@@ -121,7 +114,8 @@ export function EditProfilePage() {
         };
     }, [previewUrl]);
 
-    const profileImageSrc = apiPath.PROFILE_IMAGE_STORATE_URL + oldImageName
+    const profileImageSrc =
+        previewUrl ?? (oldImageName ? apiPath.PROFILE_IMAGE_STORATE_URL + oldImageName : "");
 
     // 파일 선택 핸들러
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -184,7 +178,7 @@ export function EditProfilePage() {
         (isDuplicateNickname ? "중복된 닉네임입니다." : "");
 
     const canSubmit =
-        isValid && !isDuplicateNickname && !isSubmitting && !!nicknameValue?.trim();
+        !isLoading && isDirty && isValid && !isDuplicateNickname && !isSubmitting && !!nicknameValue?.trim();
 
     const onSubmit = async (values: EditProfileFormValues) => {
         if (!user) return;
@@ -198,7 +192,7 @@ export function EditProfilePage() {
                 localStorage.getItem(LOCAL_STORAGE_KEY.PROFILE_IMAGE) ??
                 null;
 
-            const profileImage = newFile;
+            const profileImage: File = newFile ?? new File([], "", { type: "application/octet-stream" });
 
             const response = await requestProfileEdit(
                 user.id,
@@ -228,6 +222,7 @@ export function EditProfilePage() {
                     }
                     : prev
             );
+            setIsDuplicateNickname(true);
 
             showToast({
                 title: "수정 완료",
@@ -258,7 +253,7 @@ export function EditProfilePage() {
                 try {
                     const userIdStr = Number(localStorage.getItem(LOCAL_STORAGE_KEY.CURRENT_USER_ID))
                     await requestDeleteUser(userIdStr);
-                    navigate("/logout");
+                    logoutWithoutModal();
                 } catch (error) {
                     if (error instanceof ApiError) {
                         showToast({
@@ -275,7 +270,7 @@ export function EditProfilePage() {
     };
 
     const handleGoPostList = () => {
-        navigate("/post");
+        navigate("/postlist");
     };
 
     if (isLoading) {
@@ -298,7 +293,6 @@ export function EditProfilePage() {
         );
     }
 
-    // ========= 8. 실제 화면 렌더링 =========
     return (
         <div className="edit-profile-container">
             <div className="edit-profile-wrapper">
@@ -316,11 +310,13 @@ export function EditProfilePage() {
                             type="file"
                             accept="image/*"
                             onChange={handleFileChange}
+                            ref={fileInputRef}
                         />
                         <button
                             id="edit-profile-image-upload-btn"
                             type="button"
                             className="edit-profile-image-upload-btn"
+                            onClick={() => fileInputRef.current?.click()}
                         >
                             <img
                                 id="edit-profile-image-preview"

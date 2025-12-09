@@ -15,6 +15,7 @@ export function Toast({ title, buttonTitle, onClick }: ToastProps) {
                 <button
                     id="toast-btn"
                     type="button"
+                    autoFocus
                     onClick={onClick}
                 >
                     {buttonTitle}
