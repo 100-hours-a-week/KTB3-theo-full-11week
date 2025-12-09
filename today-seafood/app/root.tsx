@@ -13,6 +13,7 @@ import { UserProvider } from "./features/shared/lib/context/UserContext";
 import { CommonHeader } from "./features/shared/components/common-header/CommonHeader";
 import "./root.css";
 
+console.log("테스트");
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
