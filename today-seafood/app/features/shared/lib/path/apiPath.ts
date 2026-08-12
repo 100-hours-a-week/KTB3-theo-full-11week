@@ -1,11 +1,11 @@
 // API 요청 경로
 export const apiPath = {
-  API_SERVER_URL: "https://localhost:8443",
+  API_SERVER_URL: "https://localhost:8443/api",
 
   // Image Storage
-  PROFILE_IMAGE_STORATE_URL: "https://localhost:8443/images/profile/",
-  ARTICLE_IMAGE_STORAGE_URL: "https://localhost:8443/images/article/",
-  TODAY_FISH_LOGO_URL: "https://localhost:8443/images/logo/",
+  PROFILE_IMAGE_STORATE_URL: "https://localhost:8443/api/images/profile/",
+  ARTICLE_IMAGE_STORAGE_URL: "https://localhost:8443/api/images/article/",
+  TODAY_FISH_LOGO_URL: "https://localhost:8443/api/images/logo/",
 
   // Auth
   LOGIN_API_URL: "/auth/access/token",
@@ -27,14 +27,14 @@ export const apiPath = {
   MAKE_POST_API_URL: "/post",
   POST_DETAIL_API_URL: (postId: number | string) => `/post/${postId}`,
   POST_LIKE_API_URL: (postId: number | string) => `/post/${postId}/like`,
-  POST_LIKE_CANCEL_API_URL: (postId: number | string) =>`/post/${postId}/like/cancel`,
+  POST_LIKE_CANCEL_API_URL: (postId: number | string) => `/post/${postId}/like/cancel`,
   DELETE_POST_API_URL: (postId: number | string) => `/post/${postId}`,
   EDIT_POST_API_URL: (postId: number | string) => `/post/${postId}`,
   INCREASE_POST_VIEW_COUNT_API_URL: (postId: number | string) => `/post/${postId}/hit`,
 
   // Comment
-  CREATE_COMMENT_API_URL: (postId: number | string) =>`/post/${postId}/comment`,
-  FIND_COMMENTS_API_URL: (postId: number | string) =>`/post/${postId}/comment`,
-  DELETE_COMMENT_API_URL: (postId: number | string, commentId: number | string) =>`/post/${postId}/comment/${commentId}`,
-  UPDATE_COMMENT_API_URL: (postId: number | string, commentId: number | string) =>`/post/${postId}/comment/${commentId}`,
+  CREATE_COMMENT_API_URL: (postId: number | string) => `/post/${postId}/comment`,
+  FIND_COMMENTS_API_URL: (postId: number | string) => `/post/${postId}/comment`,
+  DELETE_COMMENT_API_URL: (postId: number | string, commentId: number | string) => `/post/${postId}/comment/${commentId}`,
+  UPDATE_COMMENT_API_URL: (postId: number | string, commentId: number | string) => `/post/${postId}/comment/${commentId}`,
 } as const;

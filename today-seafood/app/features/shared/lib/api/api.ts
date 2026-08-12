@@ -83,12 +83,20 @@ export class Api {
       throw new Error("URL이 필요합니다.");
     }
 
-    const requestUrl = new URL(this._url, apiPath.API_SERVER_URL);
+    const relativePath = this._url.startsWith("/")
+      ? this._url.slice(1)
+      : this._url;
+
+    const baseUrl = apiPath.API_SERVER_URL.endsWith("/")
+      ? apiPath.API_SERVER_URL
+      : `${apiPath.API_SERVER_URL}/`;
+
+    const requestUrl = new URL(relativePath, baseUrl);
 
     Object.entries(this._queryString).forEach(([key, value]) => {
       requestUrl.searchParams.append(key, String(value));
     });
-
+    console.log(requestUrl.toString());
     return requestUrl.toString();
   }
 
